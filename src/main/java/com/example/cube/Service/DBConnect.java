@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DBConnect {
 
@@ -12,8 +13,7 @@ public class DBConnect {
     static String userName = "valentin";
     static String password = "kilabilon";
 
-    @SneakyThrows
-    public Connection conn (){
+    public Connection conn () throws SQLException {
         return (Connection) DriverManager.getConnection(url + dbName , userName, password);
     }
 }
