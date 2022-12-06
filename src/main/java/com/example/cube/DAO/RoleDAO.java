@@ -1,10 +1,11 @@
 package com.example.cube.DAO;
 
+import com.example.cube.Model.Role;
 import com.example.cube.Model.User;
 import com.example.cube.Service.DBConnect;
-import lombok.SneakyThrows;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RoleDAO extends DBConnect {
@@ -17,10 +18,18 @@ public class RoleDAO extends DBConnect {
         preparedStatement.execute();
     }
 
-    public void getRole(User user) throws SQLException{
+    public Role getRole(User user) throws SQLException{
+        Role role = new Role();
+
         PreparedStatement preparedStatement = conn().prepareStatement("CALL getRole(?)");
         preparedStatement.setInt(1, user.getId());
-        preparedStatement.execute();
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        role.setUserId(resultSet.getInt(1));
+        role.setRole(resultSet.getString(2));
+        role.setVerified(resultSet.getBoolean(3));
+
+        return role;
     }
 
     public void updateRole(User user, String role, boolean verified) throws SQLException{

@@ -6,7 +6,10 @@ import com.example.cube.Service.DBConnect;
 import lombok.SneakyThrows;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResourceToCatalogueDAO extends DBConnect {
 
@@ -17,16 +20,31 @@ public class ResourceToCatalogueDAO extends DBConnect {
         preparedStatement.execute();
     }
 
-    public void getReferenceByResource(Resource resource) throws SQLException{
-        PreparedStatement preparedStatement = conn().prepareStatement("CALL getReferenceByResource(?)");
+    public List<Catalogue> getCatalogueByResource(Resource resource) throws SQLException{
+        List<Catalogue> catalogues = new ArrayList<>();
+
+        PreparedStatement preparedStatement = conn().prepareStatement("CALL getCatalogueByResource(?)");
         preparedStatement.setInt(1, resource.getId());
-        preparedStatement.execute();
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+
+        }
+
+        return catalogues;
     }
 
-    public void getReferenceByCatalogue(Catalogue catalogue) throws SQLException{
-        PreparedStatement preparedStatement = conn().prepareStatement("CALL getReferenceByCatalogue(?)");
+    public List<Resource> getReferenceByCatalogue(Catalogue catalogue) throws SQLException{
+        List<Resource> resources = new ArrayList<>();
+
+        PreparedStatement preparedStatement = conn().prepareStatement("CALL getResourceByCatalogue(?)");
         preparedStatement.setInt(1, catalogue.getId());
-        preparedStatement.execute();
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+
+        }
+
+        return resources;
+
     }
 
     public void deleteReference(Resource resource, Catalogue catalogue) throws SQLException{

@@ -2,7 +2,6 @@ package com.example.cube.DAO;
 
 import com.example.cube.Model.User;
 import com.example.cube.Service.DBConnect;
-import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
