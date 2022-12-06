@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Conversation !</title>
+    <link rel="icon" href="assets/img/logo.png">
+
+    <link rel="stylesheet" href="assets/css/chat.css"/>
+    <link rel="stylesheet" href="assets/library/chosen-1.8.7/chosen.min.css"/>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="assets/library/bootstrap-4.1.1/bootstrap.min.css"/>
+
+    <script src="assets/library/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <script src="assets/library/chosen-1.8.7/chosen.jquery.min.js"></script>
+    <script src="assets/library/bootstrap-4.1.1/popper.min.js"></script>
+    <script src="assets/library/bootstrap-4.1.1/bootstrap.min.js"></script>
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100">
+<div class="w-400 h-60 shadow p-4 rounded">
+    <a href="home" class="fs-4 link-dark">&#8592;</a>
+
+    <div class="d-flex align-items-center">
+
+        <div class="upload d-flex align-content-end" id="upload">
+            <label for="form_upload_add_file" class="file-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                     class="bi bi-paperclip" viewBox="0 0 16 16">
+                    <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+                </svg>
+            </label>
+            <div class="input_div">
+                <!--<form action="#" th:action="@{/signup}" th:object="${newUser}" method="post">
+                    <input id="form_upload_add_file" type="file" name="PP" class="form-control" th:field="*{pp}"/>
+                </form>-->
+            </div>
+        </div>
+
+        <h3 class="fs-xs m-2">
+            <div th:text="${group.name}"></div>
+            <div class="d-flex align-items-center" title="online">
+                <th:block th:if="${lastSeen} == 'Active'">
+                    <div class="online"></div>
+                    <small class="d-block p-1">En Ligne</small>
+                    <th:block th:unless="${lastSeen} == 'Active'">
+                        <small class="d-block p-1">
+                            Dernier message :
+                            <th:block th:text="${lastSeen}"></th:block>
+                        </small>
+                    </th:block>
+                </th:block>
+            </div>
+        </h3>
+
+    </div>
+
+    <div class="shadow p-4 h-60 rounded d-flex flex-column mt-2 chat-box" id="chatBox">
+        <th:block th:if="${messages}">
+            <th:block th:each="messages : ${messages}">
+                <th:block th:if="${user.id == messages.app_user}">
+
+                    <p class="rtext align-self-end border rounded p-2 mb-1 a">
+                        <th:block th:switch="${#strings.substring(messages.message,0 ,4)}">
+                            <th:block th:case="'img:'">
+                                <img th:src="${#strings.substring(messages.message, 4)}" class="rtext"/>
+                            </th:block>
+                            <th:block th:case="'fil:'">
+                                <a th:href="${#strings.substring(messages.message, 4)}" download='' class='a'>Télécharger
+                                    <i class='fas fa-download'></i></a>
+                            </th:block>
+                            <th:block th:case="*">
+                                <th:block th:text="${messages.message}"></th:block>
+                            </th:block>
+                        </th:block>
+
+                        <small class="d-block">
+                            <b>
+                                <th:block th:text="${user.firstname}"></th:block>
+                                <th:block th:text="${user.lastname}"></th:block>
+                            </b>
+                            <br>
+                            <th:block th:text="${#strings.abbreviate(messages.created_at,22)}"></th:block>
+                        </small>
+                    </p>
+                </th:block>
+                <th:block th:unless="${user.id == messages.app_user}">
+
+                    <p class="ltext align-self-start border rounded p-2 mb-1">
+                        <th:block th:switch="${#strings.substring(messages.message,0 ,4)}">
+                            <th:block th:case="'img:'">
+                                <img th:src="${#strings.substring(messages.message, 4)}" class="rtext"/>
+                            </th:block>
+                            <th:block th:case="'fil:'">
+                                <a th:href="${#strings.substring(messages.message, 4)}" download='' class='a'>Télécharger
+                                    <i class='fas fa-download'></i></a>
+                            </th:block>
+                            <th:block th:case="*">
+                                <th:block th:text="${messages.message}"></th:block>
+                            </th:block>
+                        </th:block>
+                        <small class="d-block">
+                            <b>
+                                <th:block th:text="${user.firstname}"></th:block>
+                                <th:block th:text="${user.lastname}"></th:block>
+                            </b>
+                            <br>
+                            <th:block th:text="${#strings.abbreviate(messages.created_at,22)}"></th:block>
+                        </small>
+                    </p>
+                </th:block>
+
+            </th:block>
+            <th:block th:unless="${messages}">
+                <div class="alert alert-info text-center">
+                    <i class="fa fa-comments d-block fs-big"></i>
+                    Pas de message pour l'instant, commencer la conversation !
+                </div>
+            </th:block>
+        </th:block>
+    </div>
+
+    <div class="input-group mb-3">
+        <textarea cols="3" id="Message" class="form-control"></textarea>
+        <button class="btn btn-primary" id="sendBtn" type="submit">
+            <i class="fa fa-paper-plane"></i>
+        </button>
+    </div>
+
+    <div id="ChatInfo"></div>
+</div>
+
+</body>
