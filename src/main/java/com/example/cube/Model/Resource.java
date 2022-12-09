@@ -12,4 +12,5 @@ public class Resource {
     private int id;
     private String access;
     private String value;
+    private String joint;
 }

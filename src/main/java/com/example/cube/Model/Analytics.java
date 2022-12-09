@@ -11,9 +11,9 @@ public class Analytics {
 
     private int activityId;
     private int resourceId;
-    private boolean view;
-    private boolean favorite;
-    private boolean created;
-    private boolean blocked;
-    private boolean share;
+    private int view;
+    private int favorite;
+    private int created;
+    private int blocked;
+    private int share;
 }
