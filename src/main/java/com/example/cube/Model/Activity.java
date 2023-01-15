@@ -14,7 +14,7 @@ public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private boolean view;
     private boolean favorite;
     private boolean created;
