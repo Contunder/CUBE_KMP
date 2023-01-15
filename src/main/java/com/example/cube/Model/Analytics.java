@@ -1,19 +1,32 @@
 package com.example.cube.Model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "analytics")
 public class Analytics {
 
-    private int activityId;
-    private int resourceId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+
     private int view;
     private int favorite;
     private int created;
     private int blocked;
     private int share;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "resource_id")
+    private Resource resource;
 }
