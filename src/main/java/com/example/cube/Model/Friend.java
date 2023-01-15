@@ -1,15 +1,26 @@
 package com.example.cube.Model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
-@ToString
+@NoArgsConstructor
+@Entity
+@Table(name = "friends")
 public class Friend {
 
-    private int userId;
-    private int friendId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "friend")
+    private User friend;
+
     private String relation;
 }
