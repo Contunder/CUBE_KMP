@@ -102,5 +102,7 @@
 
 Même si catalogue est null il est bien associées petit bug à fix  
 
-Je n'est pas fini le readme pour les points d'entrer regarder dans les controller
+Je n'est pas fini le readme pour les points d'entrer regarder dans les controller  
+
+Reste à dev : Friend / Activity / Analitycs 
 
