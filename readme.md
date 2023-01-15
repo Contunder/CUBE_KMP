@@ -1,7 +1,7 @@
 
 # CUBE KMP API
 
-##Config Database
+## Config Database
 
 - In /src/main/resources/application.properties
 - Change spring.datasource with your config 
@@ -15,13 +15,13 @@
 
 > .anyRequest().authenticated() -> .anyRequest().permitAll()
 
-##REGISTER TO API
+## REGISTER TO API
 
 - Entry point for login : /api/auth/register
 - In JSON (example at bottom)
 - By default your hare a simply user for change in Admin for this time you have to change value in database user_role
 
-####Exemple :
+#### Exemple :
 
 >{  
 "name":"",  
@@ -34,63 +34,63 @@
 "password":""  
 }
 
-####Response :
+#### Response :
 
 >User registered successfully!.
 
-##LOGIN TO API
+## LOGIN TO API
 
 - Entry point for login : /api/auth/login
 - In JSON (example at bottom)
 - Use Bearer token and past the api key 
 
-####Exemple :
+#### Exemple :
 
 >{  
 "userEmail":"",  
 "password":""  
 }  
 
-####Response :
+#### Response :
 
 >{  
 "accessToken": "eyJhbGciOiJI2jrskm5NGk4Bky8Xzr7C74YLt_TmHs9I7VG-WV",  
 "tokenType": "Bearer"  
 }
 
-##POST CATALOGUE TO API
+## POST CATALOGUE TO API
 
 - Entry point for login : /api/catalogue
 - In JSON (example at bottom)
 - With Bearer token has an Admin
 
-####Exemple :
+#### Exemple :
 
 >{  
 "category":"Test"  
 }
 
-####Response :
+#### Response :
 
 >{  
 "id": 1,  
 "category": "Test"  
 }
 
-##POST RESOURCE TO API
+## POST RESOURCE TO API
 
 - Entry point for login : /api/resources/add/{catalogueId}
 - In JSON (example at bottom)
 - With Bearer token
 
-####Exemple :
+#### Exemple :
 
 >{  
 "access":"Public",  
 "value":"Test de plus de 10 charactére"  
 }  
 
-####Response :
+#### Response :
 
 >{  
 "id": 1,  
