@@ -1,6 +1,7 @@
 package com.example.cube.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Null;
 import lombok.*;
 
 @Getter
@@ -17,6 +18,8 @@ public class Comment {
 
     @Column(name = "value", nullable = false)
     private String value;
+
+    @Column(nullable = true)
     private boolean moderated;
 
     @ManyToOne(fetch = FetchType.LAZY)

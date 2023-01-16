@@ -4,13 +4,21 @@ import com.example.cube.Exception.CubeAPIException;
 import com.example.cube.Exception.ResourceNotFoundException;
 import com.example.cube.Model.Comment;
 import com.example.cube.Model.Resource;
+import com.example.cube.Model.User;
 import com.example.cube.Payload.CommentDto;
 import com.example.cube.Repository.CommentRepository;
 import com.example.cube.Repository.ResourceRepository;
+import com.example.cube.Repository.UserRepository;
 import com.example.cube.Service.CommentService;
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.security.Security;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,21 +27,25 @@ public class CommentServiceImpl implements CommentService {
 
     private CommentRepository commentRepository;
     private ResourceRepository resourceRepository;
+    private UserRepository userRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository, ResourceRepository resourceRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, ResourceRepository resourceRepository, UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.resourceRepository = resourceRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public CommentDto createComment(long resourceId, CommentDto commentDto) {
 
         Comment comment = mapToEntity(commentDto);
-
         Resource resource = resourceRepository.findById(resourceId).orElseThrow(
-                () -> new ResourceNotFoundException("Post", "id", resourceId));
+                () -> new ResourceNotFoundException("Resources", "id", resourceId));
+        User user = userRepository.findByEmail("valentin.denavaut@hotmail.fr").orElseThrow(
+                () -> new ResourceNotFoundException("Resources", "id", resourceId));
 
         comment.setResource(resource);
+        comment.setUser(user);
 
         Comment newComment =  commentRepository.save(comment);
 
