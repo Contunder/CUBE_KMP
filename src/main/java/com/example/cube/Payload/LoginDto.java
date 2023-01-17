@@ -2,10 +2,7 @@ package com.example.cube.Payload;
 
 import lombok.*;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class LoginDto {
     private String userEmail;
     private String password;

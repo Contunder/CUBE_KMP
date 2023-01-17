@@ -1,11 +1,12 @@
 package com.example.cube.Payload;
 
-import lombok.*;
+import lombok.Data;
 
 import java.sql.Date;
 
 @Data
-public class RegisterDto {
+public class UserDto {
+    private long id;
     private String name;
     private String lastName;
     private Date birthday;
@@ -13,5 +14,5 @@ public class RegisterDto {
     private String zipCode;
     private String city;
     private String email;
-    private String password;
+    private String profilPicture;
 }

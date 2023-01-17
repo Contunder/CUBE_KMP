@@ -43,10 +43,10 @@ public class ResourceServiceImpl implements ResourceService {
         catalogue.add(resourceCatalogue);
         resource.setCatalogue(catalogue);
 
-        Resource newPost = resourceRepository.save(resource);
+        Resource newResource = resourceRepository.save(resource);
 
-        ResourceDto postResponse = mapToDTO(newPost);
-        return postResponse;
+        ResourceDto resourceResponse = mapToDTO(newResource);
+        return resourceResponse;
     }
 
     @Override
@@ -57,33 +57,33 @@ public class ResourceServiceImpl implements ResourceService {
 
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        Page<Resource> posts = resourceRepository.findAll(pageable);
+        Page<Resource> resource = resourceRepository.findAll(pageable);
 
-        List<Resource> listOfPosts = posts.getContent();
+        List<Resource> listOfResources = resource.getContent();
 
-        List<ResourceDto> content= listOfPosts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+        List<ResourceDto> content= listOfResources.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
 
         ResourceResponse resourceResponse = new ResourceResponse();
         resourceResponse.setContent(content);
-        resourceResponse.setPageNo(posts.getNumber());
-        resourceResponse.setPageSize(posts.getSize());
-        resourceResponse.setTotalElements(posts.getTotalElements());
-        resourceResponse.setTotalPages(posts.getTotalPages());
-        resourceResponse.setLast(posts.isLast());
+        resourceResponse.setPageNo(resource.getNumber());
+        resourceResponse.setPageSize(resource.getSize());
+        resourceResponse.setTotalElements(resource.getTotalElements());
+        resourceResponse.setTotalPages(resource.getTotalPages());
+        resourceResponse.setLast(resource.isLast());
 
         return resourceResponse;
     }
 
     @Override
     public ResourceDto getResourceById(long id) {
-        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
+        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id));
         return mapToDTO(resource);
     }
 
     @Override
     public ResourceDto updateResource(ResourceDto resourceDto, long id, long catalogueId) {
 
-        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
+        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id));
 
         resource.setAccess(resourceDto.getAccess());
         resource.setValue(resourceDto.getValue());
@@ -99,8 +99,8 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public void deleteResourceById(long id) {
-        Resource post = resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
-        resourceRepository.delete(post);
+        Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id));
+        resourceRepository.delete(resource);
     }
 
     @Override

@@ -68,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
                 new ResourceNotFoundException("Comment", "id", commentId));
 
         if(comment.getResource().getId() != resource.getId()){
-            throw new CubeAPIException(HttpStatus.BAD_REQUEST, "Comment does not belong to post");
+            throw new CubeAPIException(HttpStatus.BAD_REQUEST, "Comment does not belong to resource");
         }
 
         return mapToDTO(comment);
@@ -78,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto updateComment(Long resourceId, long commentId, CommentDto commentRequest) {
 
         Resource resource = resourceRepository.findById(resourceId).orElseThrow(
-                () -> new ResourceNotFoundException("Post", "id", resourceId));
+                () -> new ResourceNotFoundException("Resource", "id", resourceId));
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
                 new ResourceNotFoundException("Comment", "id", commentId));
@@ -96,7 +96,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Long resourceId, Long commentId) {
         Resource resource = resourceRepository.findById(resourceId).orElseThrow(
-                () -> new ResourceNotFoundException("Post", "id", resourceId));
+                () -> new ResourceNotFoundException("Resource", "id", resourceId));
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
                 new ResourceNotFoundException("Comment", "id", commentId));
