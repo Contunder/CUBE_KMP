@@ -44,4 +44,7 @@ public class User {
     )
     private Set<Role> roles;
 
+    @OneToMany( mappedBy="user", cascade=CascadeType.ALL, orphanRemoval = true)
+    private Set<Friend> friends;
+
 }

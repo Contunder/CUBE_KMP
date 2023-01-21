@@ -15,7 +15,7 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
-    JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
     private JwtTokenProvider jwtTokenProvider;
 
     public UserController(UserService userService, JwtAuthenticationFilter jwtAuthenticationFilter, JwtTokenProvider jwtTokenProvider){
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping(value = {"/actual"})
-    public ResponseEntity<UserDto> getUserById(HttpServletRequest request) {
+    public ResponseEntity<UserDto> getUser(HttpServletRequest request) {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
         String email = jwtTokenProvider.getUsername(token);
 

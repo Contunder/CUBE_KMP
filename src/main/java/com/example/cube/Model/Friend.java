@@ -3,6 +3,8 @@ package com.example.cube.Model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -10,17 +12,24 @@ import lombok.*;
 @Table(name = "friends")
 public class Friend {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @EmbeddedId
+    private Key key = new Key();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user")
+    @ManyToOne
+    @MapsId("user")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "friend")
+    @ManyToOne
+    @MapsId("friend")
     private User friend;
 
     private String relation;
+    private boolean isActive;
+
+
+    @Embeddable
+    public static class Key implements Serializable {
+        private Long user;
+        private Long friend;
+    }
 }

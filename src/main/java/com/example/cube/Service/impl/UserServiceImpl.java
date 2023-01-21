@@ -54,4 +54,19 @@ public class UserServiceImpl implements UserService {
 
         return userDto;
     }
+
+    private User mapToEntity(UserDto userDto){
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setName(userDto.getName());
+        user.setLastName(userDto.getLastName());
+        user.setBirthday(userDto.getBirthday());
+        user.setEmail(userDto.getEmail());
+        user.setAddress(userDto.getAddress());
+        user.setZipCode(userDto.getZipCode());
+        user.setCity(userDto.getCity());
+        user.setProfilePicture(userDto.getProfilPicture());
+
+        return user;
+    }
 }
