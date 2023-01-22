@@ -43,8 +43,11 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<UserDto>> getAllUser(){
-        return ResponseEntity.ok(userService.getAllUser());
+    public ResponseEntity<List<UserDto>> getAllUser(HttpServletRequest request){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return ResponseEntity.ok(userService.getAllUser(email));
     }
 
 }
