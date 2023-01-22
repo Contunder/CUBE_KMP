@@ -1,6 +1,5 @@
 package com.example.cube.Service.impl;
 
-import com.example.cube.Exception.CubeAPIException;
 import com.example.cube.Model.Friend;
 import com.example.cube.Model.User;
 import com.example.cube.Payload.FriendDto;
@@ -133,13 +132,4 @@ public class FriendServiceImpl implements FriendService {
         return friendRequest;
     }
 
-//    private User mapToEntity(User user, User friend, String relation){
-//        Friend newFriend = new Friend();
-//        newFriend.setUser(user);
-//        newFriend.setFriend(friend);
-//        newFriend.setRelation(relation);
-//        newFriend.setActive(false);
-//
-//        return user;
-//    }
 }
