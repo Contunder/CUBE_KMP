@@ -33,10 +33,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUser() {
+    public List<UserDto> getAllUser(String email) {
+        User actualUser = userRepository.findUserByEmail(email);
         List<User> users = userRepository.findAll();
+        users = users.stream().filter(user -> user != actualUser).collect(Collectors.toList());
 
-        return users.stream().map((user) -> mapToDTO(user))
+        return users.stream().map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -55,18 +57,18 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
-    private User mapToEntity(UserDto userDto){
-        User user = new User();
-        user.setId(userDto.getId());
-        user.setName(userDto.getName());
-        user.setLastName(userDto.getLastName());
-        user.setBirthday(userDto.getBirthday());
-        user.setEmail(userDto.getEmail());
-        user.setAddress(userDto.getAddress());
-        user.setZipCode(userDto.getZipCode());
-        user.setCity(userDto.getCity());
-        user.setProfilePicture(userDto.getProfilPicture());
-
-        return user;
-    }
+//    private User mapToEntity(UserDto userDto){
+//        User user = new User();
+//        user.setId(userDto.getId());
+//        user.setName(userDto.getName());
+//        user.setLastName(userDto.getLastName());
+//        user.setBirthday(userDto.getBirthday());
+//        user.setEmail(userDto.getEmail());
+//        user.setAddress(userDto.getAddress());
+//        user.setZipCode(userDto.getZipCode());
+//        user.setCity(userDto.getCity());
+//        user.setProfilePicture(userDto.getProfilPicture());
+//
+//        return user;
+//    }
 }

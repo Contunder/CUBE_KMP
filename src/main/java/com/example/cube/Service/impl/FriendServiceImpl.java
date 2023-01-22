@@ -3,6 +3,7 @@ package com.example.cube.Service.impl;
 import com.example.cube.Model.Friend;
 import com.example.cube.Model.User;
 import com.example.cube.Payload.FriendDto;
+import com.example.cube.Payload.FriendRequest;
 import com.example.cube.Repository.FriendRepository;
 import com.example.cube.Repository.UserRepository;
 import com.example.cube.Service.FriendService;
@@ -43,6 +44,17 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
+    public List<FriendRequest> getRequestFriendsByUserEmail(String email) {
+        User user = userRepository.findUserByEmail(email);
+        List<Friend> friendRequest = friendRepository.getFriendsRequestByUser(user);
+
+        return friendRequest.stream()
+                .map(this::mapRequestToDTO)
+                .filter(FriendRequest -> !FriendRequest.isActive())
+                .toList();
+    }
+
+    @Override
     public List<FriendDto> getFriendsByRelation(String email, String relation) {
         User user = userRepository.findUserByEmail(email);
         List<Friend> friends = friendRepository.getFriendsByUser(user);
@@ -51,6 +63,32 @@ public class FriendServiceImpl implements FriendService {
                 .map(this::mapToDTO)
                 .filter(friendDto -> friendDto.getRelation().equals(relation))
                 .toList();
+    }
+
+    @Override
+    public String setFriendsByEmail(String userEmail, String friendEmail, String relation) {
+        User user = userRepository.findUserByEmail(userEmail);
+        User friend = userRepository.findUserByEmail(friendEmail);
+
+        Friend newFriend = new Friend();
+        newFriend.setUser(user);
+        newFriend.setFriend(friend);
+        newFriend.setRelation(relation);
+        newFriend.setActive(false);
+
+        friendRepository.save(newFriend);
+
+        return "Friend registered successfully!.";
+    }
+
+    @Override
+    public String setActiveFriendsByEmail(String friendEmail) {
+        User friendRequest = userRepository.findUserByEmail(friendEmail);
+        Friend friend = friendRepository.getUserRequestByFriend(friendRequest);
+
+        friend.setActive(true);
+
+        return "Friend successfully add!.";
     }
 
     private FriendDto mapToDTO(Friend friend){
@@ -65,4 +103,27 @@ public class FriendServiceImpl implements FriendService {
 
         return friendDto;
     }
+
+    private FriendRequest mapRequestToDTO(Friend user){
+        user.getUser().setPassword(null);
+        user.getUser().setRoles(null);
+        user.getUser().setFriends(null);
+
+        FriendRequest friendRequest = new FriendRequest();
+        friendRequest.setUser(user.getUser());
+        friendRequest.setRelation(user.getRelation());
+        friendRequest.setActive(user.isActive());
+
+        return friendRequest;
+    }
+
+//    private User mapToEntity(User user, User friend, String relation){
+//        Friend newFriend = new Friend();
+//        newFriend.setUser(user);
+//        newFriend.setFriend(friend);
+//        newFriend.setRelation(relation);
+//        newFriend.setActive(false);
+//
+//        return user;
+//    }
 }
