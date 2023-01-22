@@ -16,5 +16,5 @@ public interface FriendService {
 
     String setFriendsByEmail(String userEmail, String friendEmail, String relation);
 
-    String setActiveFriendsByEmail(String friendEmail);
+    String setActiveFriendsByEmail(String userEmail, String friendEmail, String relation);
 }

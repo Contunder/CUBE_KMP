@@ -1,5 +1,6 @@
 package com.example.cube.Service.impl;
 
+import com.example.cube.Exception.CubeAPIException;
 import com.example.cube.Model.Friend;
 import com.example.cube.Model.User;
 import com.example.cube.Payload.FriendDto;
@@ -10,6 +11,8 @@ import com.example.cube.Service.FriendService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class FriendServiceImpl implements FriendService {
@@ -46,7 +49,7 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public List<FriendRequest> getRequestFriendsByUserEmail(String email) {
         User user = userRepository.findUserByEmail(email);
-        List<Friend> friendRequest = friendRepository.getFriendsRequestByUser(user);
+        List<Friend> friendRequest = friendRepository.getFriendsRequestByFriend(user);
 
         return friendRequest.stream()
                 .map(this::mapRequestToDTO)
@@ -82,11 +85,24 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public String setActiveFriendsByEmail(String friendEmail) {
-        User friendRequest = userRepository.findUserByEmail(friendEmail);
-        Friend friend = friendRepository.getUserRequestByFriend(friendRequest);
+    public String setActiveFriendsByEmail(String userEmail, String friendEmail, String relation) {
 
-        friend.setActive(true);
+        User user = userRepository.findUserByEmail(userEmail);
+        List<Friend> friendRequest = friendRepository.getFriendsRequestByFriend(user);
+        Optional<Friend> providerFriend = friendRequest.stream().filter(friend -> friend.getUser().getEmail().equals(friendEmail)).findFirst();
+
+        providerFriend.ifPresent(friend -> friend.setActive(true));
+        providerFriend.ifPresent(friend -> friendRepository.save(friend));
+
+        User friend = userRepository.findUserByEmail(friendEmail);
+
+        Friend newFriend = new Friend();
+        newFriend.setUser(user);
+        newFriend.setFriend(friend);
+        newFriend.setRelation(relation);
+        newFriend.setActive(true);
+
+        friendRepository.save(newFriend);
 
         return "Friend successfully add!.";
     }
