@@ -91,18 +91,18 @@ public class FriendServiceImpl implements FriendService {
         List<Friend> friendRequest = friendRepository.getFriendsRequestByFriend(user);
         Optional<Friend> providerFriend = friendRequest.stream().filter(friend -> friend.getUser().getEmail().equals(friendEmail)).findFirst();
 
-        providerFriend.ifPresent(friend -> friend.setActive(true));
-        providerFriend.ifPresent(friend -> friendRepository.save(friend));
-
         User friend = userRepository.findUserByEmail(friendEmail);
 
         Friend newFriend = new Friend();
         newFriend.setUser(user);
         newFriend.setFriend(friend);
         newFriend.setRelation(relation);
-        newFriend.setActive(true);
+        newFriend.setActive(providerFriend.isPresent());
 
         friendRepository.save(newFriend);
+
+        providerFriend.ifPresent(friendRequester -> friendRequester.setActive(true));
+        providerFriend.ifPresent(friendRequester -> friendRepository.save(friendRequester));
 
         return "Friend successfully add!.";
     }
