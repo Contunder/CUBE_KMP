@@ -58,6 +58,80 @@
 "tokenType": "Bearer"  
 }
 
+## GET USER TO API
+
+- Entry point for login : /api/user/actual
+- With Bearer token
+
+#### Response :
+
+>{  
+"id": 2,  
+"name": "Test",  
+"lastName": "Test",  
+"birthday": "1998-10-06",  
+"address": "Test",  
+"zipCode": "59000",  
+"city": "Lille",  
+"email": "test@yopmail.com",  
+"profilPicture": null  
+}  
+
+## GET FRIENDS TO API
+
+- Entry point for login : /api/friend/user
+- With Bearer token
+
+#### Response :
+
+>[  
+{  
+"id": 0,  
+"friend":  
+{  
+"id": 2,   
+"name": "Test",  
+"lastName": "Test",  
+"birthday": "1998-10-06",  
+"address": "Test",  
+"zipCode": "59000",  
+"city": "Lille",  
+"email": "test@yopmail.com",  
+"password": null,  
+"profilePicture": null,  
+"verified": false,  
+"disabled": false,  
+"roles": null,  
+"friends": null  
+},  
+"relation": "Famille",  
+"active": true -> si a true à accepter la demande  
+},  
+
+>{  
+"id": 0,  
+"friend":  
+> {  
+"id": 3,  
+"name": "Test2",  
+"lastName": "Test2",  
+"birthday": "1998-10-06",  
+"address": "Test2",  
+"zipCode": "59000",  
+"city": "Lille",  
+"email": "test2@yopmail.com",  
+"password": null,  
+"profilePicture": null,  
+"verified": false,  
+"disabled": false,  
+"roles": null,  
+"friends": null  
+},  
+"relation": "Test",  
+"active": false -> si à false n'a pas accepter la demande  
+}  
+]  
+
 ## POST CATALOGUE TO API
 
 - Entry point for login : /api/catalogue
@@ -105,4 +179,3 @@ Même si catalogue est null il est bien associées petit bug à fix
 Je n'est pas fini le readme pour les points d'entrer regarder dans les controller  
 
 Reste à dev : Friend / Activity / Analitycs 
-
