@@ -536,9 +536,3 @@ Même si catalogue est null il est bien associées petit bug à fix
 >
 
 Reste à dev : Activity / Analitycs 
-
-http://localhost:8080/api/resource/1/comments
-
-{
-"value":"Test de plus de 10 charactére"
-}
