@@ -17,7 +17,7 @@
 
 ## REGISTER TO API
 
-- Entry point for login : /api/auth/register
+- Entry point : /api/auth/register
 - In JSON (example at bottom)
 - By default your hare a simply user for change in Admin for this time you have to change value in database user_role
 
@@ -40,7 +40,7 @@
 
 ## LOGIN TO API
 
-- Entry point for login : /api/auth/login
+- Entry point : /api/auth/login
 - In JSON (example at bottom)
 - Use Bearer token and past the api key 
 
@@ -60,7 +60,7 @@
 
 ## GET USER TO API
 
-- Entry point for login : /api/user/actual
+- Entry point : /api/user/actual
 - With Bearer token
 
 #### Response :
@@ -77,9 +77,68 @@
 "profilPicture": null  
 }  
 
+## GET USER BY EMAIL TO API
+
+- Entry point : /api/user/email/{email}
+- With Bearer token
+
+#### Response :
+
+>{  
+"id": 2,  
+"name": "Test",  
+"lastName": "Test",  
+"birthday": "1998-10-06",  
+"address": "Test",  
+"zipCode": "59000",  
+"city": "Lille",  
+"email": "test@yopmail.com",  
+"profilPicture": null  
+}
+
+## GET USER BY ID TO API
+
+- Entry point : /api/user/id/{id}
+- With Bearer token
+
+#### Response :
+
+>{  
+"id": 2,  
+"name": "Test",  
+"lastName": "Test",  
+"birthday": "1998-10-06",  
+"address": "Test",  
+"zipCode": "59000",  
+"city": "Lille",  
+"email": "test@yopmail.com",  
+"profilPicture": null  
+}
+
+## GET ALL USER TO API
+
+- Entry point : /api/user/all
+- All user except actual user
+- With Bearer token
+
+#### Response :
+
+>{  
+"id": 2,  
+"name": "Test",  
+"lastName": "Test",  
+"birthday": "1998-10-06",  
+"address": "Test",  
+"zipCode": "59000",  
+"city": "Lille",  
+"email": "test@yopmail.com",  
+"profilPicture": null  
+}  
+
+
 ## GET FRIENDS TO API
 
-- Entry point for login : /api/friend/user
+- Entry point : /api/friend/user
 - With Bearer token
 
 #### Response :
@@ -132,9 +191,120 @@
 }  
 ]  
 
+## GET FRIENDS REQUEST TO API
+
+- Entry point : /api/friend/request
+- With Bearer token
+
+#### Response :
+
+>[  
+{  
+"id": 0,  
+"friend":  
+{  
+"id": 2,   
+"name": "Test",  
+"lastName": "Test",  
+"birthday": "1998-10-06",  
+"address": "Test",  
+"zipCode": "59000",  
+"city": "Lille",  
+"email": "test@yopmail.com",  
+"password": null,  
+"profilePicture": null,  
+"verified": false,  
+"disabled": false,  
+"roles": null,  
+"friends": null  
+},  
+"relation": "Famille",  
+"active": false
+},
+
+## GET ACTIVE FRIENDS TO API
+
+- Entry point : /api/friend/user/active
+- With Bearer token
+
+#### Response :
+
+>[  
+{  
+"id": 0,  
+"friend":  
+{  
+"id": 2,   
+"name": "Test",  
+"lastName": "Test",  
+"birthday": "1998-10-06",  
+"address": "Test",  
+"zipCode": "59000",  
+"city": "Lille",  
+"email": "test@yopmail.com",  
+"password": null,  
+"profilePicture": null,  
+"verified": false,  
+"disabled": false,  
+"roles": null,  
+"friends": null  
+},  
+"relation": "Famille",  
+"active": true 
+},
+
+## GET FRIENDS BY RELATION TO API
+
+- Entry point : /api/friend/relation/{relation}
+- With Bearer token
+
+#### Response if {relation} = 'Famille':
+
+>[  
+{  
+"id": 0,  
+"friend":  
+{  
+"id": 2,   
+"name": "Test",  
+"lastName": "Test",  
+"birthday": "1998-10-06",  
+"address": "Test",  
+"zipCode": "59000",  
+"city": "Lille",  
+"email": "test@yopmail.com",  
+"password": null,  
+"profilePicture": null,  
+"verified": false,  
+"disabled": false,  
+"roles": null,  
+"friends": null  
+},  
+"relation": "Famille",  
+"active": true  
+},
+
+## POST FRIENDS ADD TO API
+
+- Entry point : /api/friend/add/{email}/{relation}
+- With Bearer token
+
+#### Response :
+
+>
+
+## POST ACCEPT REQUEST FRIENDS TO API
+
+- Entry point : /api/friend/request/add/{email}/{relation}
+- With Bearer token
+
+#### Response :
+
+> 
+
 ## POST CATALOGUE TO API
 
-- Entry point for login : /api/catalogue
+- Entry point  : /api/catalogue
 - In JSON (example at bottom)
 - With Bearer token has an Admin
 
@@ -151,9 +321,71 @@
 "category": "Test"  
 }
 
+## GET CATALOGUE BY ID TO API
+
+- Entry point : /api/catalogue/{id}
+- In JSON (example at bottom)
+- With Bearer token has an Admin
+
+#### Response if {id} = 1:
+
+>{  
+"id": 1,  
+"category": "Test"  
+}
+
+## GET ALL CATALOGUES TO API
+
+- Entry point : /api/catalogue
+- In JSON (example at bottom)
+- With Bearer token has an Admin
+
+#### Response :
+
+>{  
+"id": 1,  
+"category": "Test"  
+}
+
+## PUT CATALOGUE WITH ID TO API
+
+- Entry point : /api/catalogue/{id}
+- In JSON (example at bottom)
+- With Bearer token has an Admin
+
+#### Exemple if {id} = 1 :
+
+>{  
+"category":"Test"  
+}
+
+#### Response :
+
+>{  
+"id": 1,  
+"category": "Test"  
+}
+
+## DELETE CATALOGUE WITH ID TO API
+
+- Entry point : /api/catalogue/{id}
+- In JSON (example at bottom)
+- With Bearer token has an Admin
+
+#### Exemple if {id} = 1 :
+
+>{  
+"category":"Test"  
+}
+
+#### Response :
+
+>categrory deleted
+
+
 ## POST RESOURCE TO API
 
-- Entry point for login : /api/resources/add/{catalogueId}
+- Entry point : /api/resources/add/{catalogueId}
 - In JSON (example at bottom)
 - With Bearer token
 
@@ -176,6 +408,137 @@
 
 Même si catalogue est null il est bien associées petit bug à fix  
 
-Je n'est pas fini le readme pour les points d'entrer regarder dans les controller  
+## GET ALL RESOURCE TO API
 
-Reste à dev : Friend / Activity / Analitycs 
+- Entry point : /api/resources
+- You can change RequestPram for pagination 
+- pageNo / pageSize / sortBy / sortDir
+- With Bearer token
+
+#### Response :
+
+>{  
+"id": 1,  
+"access": "Public",  
+"value": "Test de plus de 10 charactére",  
+"comments": null,  
+"catalogue": null  
+}
+
+## GET RESOURCE BY ID TO API
+
+- Entry point : /api/resources/{id}
+- With Bearer token
+
+#### Response if {id} = 1 :
+
+>{  
+"id": 1,  
+"access": "Public",  
+"value": "Test de plus de 10 charactére",  
+"comments": null,  
+"catalogue": null  
+}
+
+## GET RESOURCES BY CATALOGUE ID TO API
+
+- Entry point : /api/resources/catalogue/{id}
+- With Bearer token
+
+#### Response if {id} = 1 :
+
+>{  
+"id": 1,  
+"access": "Public",  
+"value": "Test de plus de 10 charactére",  
+"comments": null,  
+"catalogue": null  
+}
+
+## PUT RESOURCE BY ID TO API
+
+- Entry point : /api/resources/{id}/{catalogueId}
+- Has an admin
+- With Bearer token
+
+#### Response if {id} = 1 and {catalogueId} = 1 :
+
+>{  
+"id": 1,  
+"access": "Public",  
+"value": "Test de plus de 10 charactére",  
+"comments": null,  
+"catalogue": null  
+}
+
+## DELETE RESOURCE BY ID TO API
+
+- Entry point : /api/resources/{id}
+- Has an Admin
+- With Bearer token
+
+#### Response if {id} = 1 :
+
+>
+
+## POST COMMENT BY RESSOURCE ID TO API
+
+- Entry point : /api/resource/{id}/comments
+- With Bearer token
+
+#### Response if {id} = 1 :
+
+>
+
+## GET COMMENT BY RESSOURCE ID TO API
+
+- Entry point : /api/resource/{id}/comments
+- With Bearer token
+
+#### Response if {id} = 1 :
+
+>
+
+## GET COMMENT BY RESSOURCE ID AND COMMENT ID TO API
+
+- Entry point : /api/resource/{resourceId}/comments/{id}
+- With Bearer token
+
+#### Response if {id} = 1 :
+
+>
+
+## GET COMMENT BY RESSOURCE ID AND COMMENT ID TO API
+
+- Entry point : /api/resource/{resourceId}/comments/{id}
+- With Bearer token
+
+#### Response if {id} = 1 :
+
+>
+
+## PUT COMMENT BY RESSOURCE ID AND COMMENT ID TO API
+
+- Entry point : /api/resource/{resourceId}/comments/{id}
+- With Bearer token
+
+#### Response if {id} = 1 :
+
+>
+
+## DELETE COMMENT BY RESSOURCE ID AND COMMENT ID TO API
+
+- Entry point : /api/resource/{resourceId}/comments/{id}
+- With Bearer token
+
+#### Response if {id} = 1 :
+
+>
+
+Reste à dev : Activity / Analitycs 
+
+http://localhost:8080/api/resource/1/comments
+
+{
+"value":"Test de plus de 10 charactére"
+}
