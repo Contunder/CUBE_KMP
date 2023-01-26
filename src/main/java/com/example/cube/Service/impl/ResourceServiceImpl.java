@@ -133,6 +133,7 @@ public class ResourceServiceImpl implements ResourceService {
         resourceDto.setId(resource.getId());
         resourceDto.setAccess(resource.getAccess());
         resourceDto.setValue(resource.getValue());
+        resourceDto.setCatalogue(resource.getCatalogue());
         return resourceDto;
     }
 
@@ -141,6 +142,7 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setId(resourceDto.getId());
         resource.setAccess(resourceDto.getAccess());
         resource.setValue(resourceDto.getValue());
+        resource.setCatalogue(resourceDto.getCatalogue());
         return resource;
     }
 }

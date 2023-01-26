@@ -1,5 +1,7 @@
 package com.example.cube.Payload;
 
+import com.example.cube.Model.Catalogue;
+import com.example.cube.Model.Comment;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -17,8 +19,8 @@ public class ResourceDto {
     @Size(min = 10, message = "Post description should have at least 10 characters")
     private String value;
 
-    private Set<CommentDto> comments;
+    private Set<Comment> comments;
 
-    private Set<CatalogueDto> catalogue;
+    private Set<Catalogue> catalogue;
 
 }
