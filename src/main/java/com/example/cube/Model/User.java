@@ -23,11 +23,8 @@ public class User {
     private String lastName;
     @Column(nullable = false)
     private Date birthday;
-    @Column(nullable = false)
     private String address;
-    @Column(nullable = false)
     private String zipCode;
-    @Column(nullable = false)
     private String city;
     @Column(nullable = false, unique = true)
     private String email;
