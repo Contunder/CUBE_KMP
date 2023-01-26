@@ -29,4 +29,5 @@ public class Resource {
             inverseJoinColumns = @JoinColumn(name = "catalogue_id", referencedColumnName = "id")
     )
     private Set<Catalogue> Catalogue;
+
 }

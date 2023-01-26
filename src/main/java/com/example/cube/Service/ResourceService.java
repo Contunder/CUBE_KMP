@@ -6,7 +6,7 @@ import com.example.cube.Payload.ResourceResponse;
 import java.util.List;
 
 public interface ResourceService {
-    ResourceDto createResource(ResourceDto resourceDto, long catalogueId);
+    ResourceDto createResource(ResourceDto resourceDto, long catalogueId, String email);
 
     ResourceResponse getAllResources(int pageNo, int pageSize, String sortBy, String sortDir);
 

@@ -21,11 +21,15 @@ public class Activity {
     private boolean blocked;
     private boolean share;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ressource_id")
     private Resource resource;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "catalogue_id")
+    private Catalogue catalogue;
 }

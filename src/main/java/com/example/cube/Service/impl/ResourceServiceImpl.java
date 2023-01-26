@@ -3,10 +3,14 @@ package com.example.cube.Service.impl;
 import com.example.cube.Exception.ResourceNotFoundException;
 import com.example.cube.Model.Catalogue;
 import com.example.cube.Model.Resource;
+import com.example.cube.Model.User;
+import com.example.cube.Payload.ActivityDto;
 import com.example.cube.Payload.ResourceDto;
 import com.example.cube.Payload.ResourceResponse;
 import com.example.cube.Repository.CatalogueRepository;
 import com.example.cube.Repository.ResourceRepository;
+import com.example.cube.Repository.UserRepository;
+import com.example.cube.Service.ActivityService;
 import com.example.cube.Service.ResourceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,15 +30,21 @@ public class ResourceServiceImpl implements ResourceService {
     private ResourceRepository resourceRepository;
 
     private CatalogueRepository catalogueRepository;
+    private ActivityService activityService;
+    private UserRepository userRepository;
 
     public ResourceServiceImpl(ResourceRepository resourceRepository,
-                               CatalogueRepository catalogueRepository) {
+                               CatalogueRepository catalogueRepository,
+                               ActivityService activityService,
+                               UserRepository userRepository) {
           this.resourceRepository = resourceRepository;
           this.catalogueRepository = catalogueRepository;
+          this.activityService = activityService;
+          this.userRepository = userRepository;
     }
 
     @Override
-    public ResourceDto createResource(ResourceDto resourceDto, long catalogueId) {
+    public ResourceDto createResource(ResourceDto resourceDto, long catalogueId, String email) {
 
         Resource resource = mapToEntity(resourceDto);
 
@@ -42,11 +52,17 @@ public class ResourceServiceImpl implements ResourceService {
         Catalogue resourceCatalogue = catalogueRepository.findById(catalogueId).get();
         catalogue.add(resourceCatalogue);
         resource.setCatalogue(catalogue);
-
         Resource newResource = resourceRepository.save(resource);
 
-        ResourceDto resourceResponse = mapToDTO(newResource);
-        return resourceResponse;
+        User user = userRepository.findUserByEmail(email);
+
+        ActivityDto activityDto = new ActivityDto();
+        activityDto.setResource(newResource);
+        activityDto.setUser(user);
+        activityDto.setCreated(true);
+        activityService.setActivity(activityDto);
+
+        return mapToDTO(newResource);
     }
 
     @Override

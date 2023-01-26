@@ -2,33 +2,39 @@ package com.example.cube.Controller;
 
 import com.example.cube.Payload.ResourceDto;
 import com.example.cube.Payload.ResourceResponse;
+import com.example.cube.Security.JwtAuthenticationFilter;
+import com.example.cube.Security.JwtTokenProvider;
 import com.example.cube.Service.ResourceService;
 import com.example.cube.Utils.AppConstants;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
 
-@Configuration
-@EnableWebMvc
 @RestController
 @RequestMapping()
 public class ResourceController {
 
     private ResourceService resourceService;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtTokenProvider jwtTokenProvider;
 
-    public ResourceController(ResourceService resourceService) {
+    public ResourceController(ResourceService resourceService, JwtAuthenticationFilter jwtAuthenticationFilter, JwtTokenProvider jwtTokenProvider) {
         this.resourceService = resourceService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/api/resources/add/{catalogueId}")
-    public ResponseEntity<ResourceDto> createResource(@Valid @RequestBody ResourceDto resourceDto, @PathVariable(name = "catalogueId") long catalogueId){
-        return new ResponseEntity<>(resourceService.createResource(resourceDto, catalogueId), HttpStatus.CREATED);
+    public ResponseEntity<ResourceDto> createResource(HttpServletRequest request, @Valid @RequestBody ResourceDto resourceDto, @PathVariable(name = "catalogueId") long catalogueId){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(resourceService.createResource(resourceDto, catalogueId, email), HttpStatus.CREATED);
     }
 
     @GetMapping("/api/resources")
