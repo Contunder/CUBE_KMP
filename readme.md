@@ -539,4 +539,58 @@ Même si catalogue est null il est bien associées petit bug à fix
 
 >
 
+## GET ACTIVITY USER TO API
+
+- Entry point : /api/activity/user/
+- With Bearer token
+
+#### Response :
+
+>[  
+{  
+"id": 1,  
+"user": {  
+"id": 1,  
+"name": "Test",  
+"lastName": "Test",  
+"birthday": "1998-10-06",  
+"address": "",  
+"zipCode": "",  
+"city": "",  
+"email": "test@yopmail.com",  
+"password": "$2a$10$SbhG1bM3p3oljN0LG5lvtOiAcoWcogDKVwt8IdXzGB.8D6yflureq",  
+"profilePicture": null,  
+"verified": false,  
+"disabled": false,  
+"roles": [  
+{  
+"id": 2,  
+"name": "ROLE_ADMIN"  
+}  
+],  
+"friends": []  
+},  
+"resource": {  
+"id": 1,  
+"access": "Public",  
+"value": "Test de plus de 10 charactére",  
+"joint": null,  
+"hibernateLazyInitializer": {},  
+"catalogue": [  
+{  
+"id": 1,  
+"category": "Test"  
+}  
+]  
+},  
+"catalogue": null,  
+"view": false,  
+"favorite": false,  
+"created": true,  
+"blocked": false,  
+"share": false  
+}  
+]  
+
+
 Reste à dev : Activity / Analitycs 
