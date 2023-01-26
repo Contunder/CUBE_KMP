@@ -2,17 +2,13 @@ package com.example.cube.Controller;
 
 import com.example.cube.Payload.CatalogueDto;
 import com.example.cube.Service.CatalogueService;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
 
-@Configuration
-@EnableWebMvc
 @RestController
 @RequestMapping("/api/catalogue")
 public class CatalogueController {

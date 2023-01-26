@@ -5,15 +5,11 @@ import com.example.cube.Security.JwtAuthenticationFilter;
 import com.example.cube.Security.JwtTokenProvider;
 import com.example.cube.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
 
-@Configuration
-@EnableWebMvc
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

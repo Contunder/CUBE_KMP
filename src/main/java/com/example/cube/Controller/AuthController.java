@@ -4,14 +4,10 @@ import com.example.cube.Payload.JWTAuthResponse;
 import com.example.cube.Payload.LoginDto;
 import com.example.cube.Payload.RegisterDto;
 import com.example.cube.Service.AuthService;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-@Configuration
-@EnableWebMvc
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
