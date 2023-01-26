@@ -15,6 +15,10 @@
 
 > .anyRequest().authenticated() -> .anyRequest().permitAll()
 
+## Config project install
+
+- mvn clean install
+
 ## REGISTER TO API
 
 - Entry point : /api/auth/register

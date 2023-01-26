@@ -5,13 +5,17 @@ import com.example.cube.Payload.ResourceResponse;
 import com.example.cube.Service.ResourceService;
 import com.example.cube.Utils.AppConstants;
 import jakarta.validation.Valid;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
 
+@Configuration
+@EnableWebMvc
 @RestController
 @RequestMapping()
 public class ResourceController {
