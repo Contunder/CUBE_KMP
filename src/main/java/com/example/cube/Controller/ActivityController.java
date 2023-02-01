@@ -1,8 +1,6 @@
 package com.example.cube.Controller;
 
-import com.example.cube.Model.Activity;
 import com.example.cube.Payload.ActivityDto;
-import com.example.cube.Payload.FriendDto;
 import com.example.cube.Security.JwtAuthenticationFilter;
 import com.example.cube.Security.JwtTokenProvider;
 import com.example.cube.Service.ActivityService;
