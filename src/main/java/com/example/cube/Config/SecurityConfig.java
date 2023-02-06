@@ -12,19 +12,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfig {
-
-    private UserDetailsService userDetailsService;
-
-    public SecurityConfig(UserDetailsService userDetailsService){
-        this.userDetailsService = userDetailsService;
-    }
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
@@ -43,17 +35,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers(HttpMethod.POST,"/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/user/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                                 .anyRequest().permitAll()
-
                 );
 
         return http.build();
-    }
-
-    @Configuration
-    public class WebConfiguration implements WebMvcConfigurer {
-        public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/*").allowedMethods("");
-        }
     }
 }
