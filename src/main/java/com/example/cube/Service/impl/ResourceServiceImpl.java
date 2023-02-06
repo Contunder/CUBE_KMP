@@ -57,7 +57,7 @@ public class ResourceServiceImpl implements ResourceService {
         User user = userRepository.findUserByEmail(email);
 
         ActivityDto activityDto = new ActivityDto();
-        activityDto.setResource(newResource);
+        activityDto.setResource(Optional.of(newResource));
         activityDto.setUser(user);
         activityDto.setCreated(true);
         activityService.setActivity(activityDto);
@@ -126,6 +126,33 @@ public class ResourceServiceImpl implements ResourceService {
 
         return resources.stream().map((resource) -> mapToDTO(resource))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String setView(String email, long id, boolean view){
+        User user = userRepository.findUserByEmail(email);
+        Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
+
+        ActivityDto activityDto = new ActivityDto();
+        activityDto.setResource(resource);
+        activityDto.setUser(user);
+        activityDto.setView(view);
+        activityService.setActivity(activityDto);
+
+        return "resource view : " + view;
+    }
+    @Override
+    public String setLike(String email, long id, boolean like){
+        User user = userRepository.findUserByEmail(email);
+        Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
+
+        ActivityDto activityDto = new ActivityDto();
+        activityDto.setResource(resource);
+        activityDto.setUser(user);
+        activityDto.setFavorite(like);
+        activityService.setActivity(activityDto);
+
+        return "resource liked : " + like;
     }
 
     private ResourceDto mapToDTO(Resource resource){

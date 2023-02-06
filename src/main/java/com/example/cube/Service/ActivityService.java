@@ -1,6 +1,5 @@
 package com.example.cube.Service;
 
-import com.example.cube.Model.Activity;
 import com.example.cube.Payload.ActivityDto;
 
 import java.util.List;

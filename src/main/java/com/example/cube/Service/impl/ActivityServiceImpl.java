@@ -1,5 +1,6 @@
 package com.example.cube.Service.impl;
 
+import com.example.cube.Exception.ResourceNotFoundException;
 import com.example.cube.Model.Activity;
 import com.example.cube.Model.Catalogue;
 import com.example.cube.Model.Resource;
@@ -69,11 +70,15 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     private ActivityDto mapToDTO(Activity activity){
+        activity.getUser().setPassword(null);
+        activity.getUser().setRoles(null);
+        activity.getUser().setFriends(null);
+
         ActivityDto activityDto = new ActivityDto();
         activityDto.setId(activity.getId());
         activityDto.setUser(activity.getUser());
-        activityDto.setResource(activity.getResource());
-        activityDto.setCatalogue(activity.getCatalogue());
+        activityDto.setResource(Optional.ofNullable(activity.getResource()));
+        activityDto.setCatalogue(Optional.ofNullable(activity.getCatalogue()));
         activityDto.setView(activity.isView());
         activityDto.setFavorite(activity.isFavorite());
         activityDto.setCreated(activity.isCreated());
@@ -87,8 +92,8 @@ public class ActivityServiceImpl implements ActivityService {
         Activity activity = new Activity();
         activity.setId(activityDto.getId());
         activity.setUser(activityDto.getUser());
-        activity.setResource(activityDto.getResource());
-        activity.setCatalogue(activityDto.getCatalogue());
+        activity.setResource(activityDto.getResource().orElseThrow());
+        activity.setCatalogue(activityDto.getCatalogue().orElseThrow());
         activity.setView(activityDto.isView());
         activity.setFavorite(activityDto.isFavorite());
         activity.setCreated(activityDto.isCreated());

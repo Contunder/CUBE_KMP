@@ -17,4 +17,8 @@ public interface ResourceService {
     void deleteResourceById(long id);
 
     List<ResourceDto> getResourcesByCategory(Long categoryId);
+
+    String setView(String email, long id, boolean view);
+
+    String setLike(String email, long id, boolean like);
 }

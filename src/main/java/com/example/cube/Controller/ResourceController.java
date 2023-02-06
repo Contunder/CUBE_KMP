@@ -75,4 +75,12 @@ public class ResourceController {
         List<ResourceDto> ResourceDtos = resourceService.getResourcesByCategory(categoryId);
         return ResponseEntity.ok(ResourceDtos);
     }
+
+    @PostMapping("/api/resources/{id}/like/{boolean}")
+    public ResponseEntity<String> likeResource(HttpServletRequest request, @PathVariable(name = "id") long id, @PathVariable("boolean") boolean like){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(resourceService.setLike(email, id, like), HttpStatus.CREATED);
+    }
 }

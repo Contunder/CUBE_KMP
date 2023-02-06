@@ -5,13 +5,15 @@ import com.example.cube.Model.Resource;
 import com.example.cube.Model.User;
 import lombok.Data;
 
+import java.util.Optional;
+
 @Data
 public class ActivityDto {
 
     private long id;
     private User user;
-    private Resource resource;
-    private Catalogue catalogue;
+    private Optional<Resource> resource;
+    private Optional<Catalogue> catalogue;
     private boolean view;
     private boolean favorite;
     private boolean created;
