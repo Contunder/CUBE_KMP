@@ -48,7 +48,7 @@ public class ActivityServiceImpl implements ActivityService {
     public void setCatalogueActivity(ActivityDto activityDto) {
         Activity catalogueActivity = activityRepository.getActivityByCatalogue(activityDto.getCatalogue());
 
-        if (Objects.nonNull(catalogueActivity.getCatalogue())){
+        if (Objects.nonNull(catalogueActivity)){
             updateActivity(catalogueActivity, activityDto);
         } else {
             Activity newActivity = mapToEntity(activityDto);
