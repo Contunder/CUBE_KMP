@@ -46,4 +46,48 @@ public class ActivityController {
         String email = jwtTokenProvider.getUsername(token);
         return ResponseEntity.ok(activityService.getActivityByCatalogue(email, catalogueId));
     }
+
+    @GetMapping(value = {"/user/view"})
+    public ResponseEntity<List<ActivityDto>> getViewedActivityByUser(HttpServletRequest request) {
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return ResponseEntity.ok(activityService.getViewedActivityByUser(email));
+    }
+
+    @GetMapping(value = {"/user/like"})
+    public ResponseEntity<List<ActivityDto>> getLikedActivityByUser(HttpServletRequest request) {
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return ResponseEntity.ok(activityService.getLickedActivityByUser(email));
+    }
+
+    @GetMapping(value = {"/user/share"})
+    public ResponseEntity<List<ActivityDto>> getSharedActivityByUser(HttpServletRequest request) {
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return ResponseEntity.ok(activityService.getShareActivityByUser(email));
+    }
+
+    @GetMapping(value = {"/user/blocked"})
+    public ResponseEntity<List<ActivityDto>> getBlockedActivityByUser(HttpServletRequest request) {
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return ResponseEntity.ok(activityService.getBlockedActivityByUser(email));
+    }
+
+    @GetMapping(value = {"/user/{id}/like"})
+    public ResponseEntity<List<ActivityDto>> getLikedActivityByUserId(@PathVariable(value = "id") long userId) {
+
+        return ResponseEntity.ok(activityService.getLikedActivityByUserId(userId));
+    }
+
+    @GetMapping(value = {"/user/{id}/share"})
+    public ResponseEntity<List<ActivityDto>> getSharedActivityByUserId(@PathVariable(value = "id") long userId) {
+
+        return ResponseEntity.ok(activityService.getSharedActivityByUserId(userId));
+    }
 }

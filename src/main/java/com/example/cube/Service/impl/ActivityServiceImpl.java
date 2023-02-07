@@ -69,6 +69,66 @@ public class ActivityServiceImpl implements ActivityService {
                 .toList();
     }
 
+    @Override
+    public List<ActivityDto> getViewedActivityByUser(String email){
+        User user = userRepository.findUserByEmail(email);
+
+        return activityRepository.getActivitiesByUser(user).stream()
+                .filter(Activity::isView)
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ActivityDto> getLickedActivityByUser(String email){
+        User user = userRepository.findUserByEmail(email);
+
+        return activityRepository.getActivitiesByUser(user).stream()
+                .filter(Activity::isFavorite)
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ActivityDto> getShareActivityByUser(String email){
+        User user = userRepository.findUserByEmail(email);
+
+        return activityRepository.getActivitiesByUser(user).stream()
+                .filter(Activity::isShare)
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ActivityDto> getBlockedActivityByUser(String email){
+        User user = userRepository.findUserByEmail(email);
+
+        return activityRepository.getActivitiesByUser(user).stream()
+                .filter(Activity::isBlocked)
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ActivityDto> getLikedActivityByUserId(long id){
+        User user = userRepository.findUserById(id);
+
+        return activityRepository.getActivitiesByUser(user).stream()
+                .filter(Activity::isFavorite)
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ActivityDto> getSharedActivityByUserId(long id){
+        User user = userRepository.findUserById(id);
+
+        return activityRepository.getActivitiesByUser(user).stream()
+                .filter(Activity::isShare)
+                .map(this::mapToDTO)
+                .toList();
+    }
+
     private ActivityDto mapToDTO(Activity activity){
         activity.getUser().setPassword(null);
         activity.getUser().setRoles(null);
