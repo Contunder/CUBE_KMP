@@ -1,12 +1,10 @@
 package com.example.cube.Service.impl;
 
-import com.example.cube.Exception.ResourceNotFoundException;
 import com.example.cube.Model.Activity;
 import com.example.cube.Model.Catalogue;
 import com.example.cube.Model.Resource;
 import com.example.cube.Model.User;
 import com.example.cube.Payload.ActivityDto;
-import com.example.cube.Payload.ResourceDto;
 import com.example.cube.Repository.ActivityRepository;
 import com.example.cube.Repository.CatalogueRepository;
 import com.example.cube.Repository.ResourceRepository;
@@ -14,7 +12,9 @@ import com.example.cube.Repository.UserRepository;
 import com.example.cube.Service.ActivityService;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
@@ -54,16 +54,6 @@ public class ActivityServiceImpl implements ActivityService {
             Activity newActivity = mapToEntity(activityDto);
             activityRepository.save(newActivity);
         }
-    }
-
-    private Activity updateActivity(Activity activity, ActivityDto activityDto) {
-
-        activity.setView(activityDto.isView());
-        activity.setFavorite(activityDto.isFavorite());
-        activity.setBlocked(activityDto.isBlocked());
-        activity.setShare(activityDto.isShare());
-
-        return activityRepository.save(activity);
     }
 
     @Override
@@ -155,6 +145,16 @@ public class ActivityServiceImpl implements ActivityService {
                 .filter(Activity::isShare)
                 .map(this::mapToDTO)
                 .toList();
+    }
+
+    private void updateActivity(Activity activity, ActivityDto activityDto) {
+
+        activity.setView(activityDto.isView());
+        activity.setFavorite(activityDto.isFavorite());
+        activity.setBlocked(activityDto.isBlocked());
+        activity.setShare(activityDto.isShare());
+
+        activityRepository.save(activity);
     }
 
     private ActivityDto mapToDTO(Activity activity){

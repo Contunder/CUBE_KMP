@@ -1,6 +1,6 @@
 package com.example.cube.Payload;
 
-import lombok.*;
+import lombok.Data;
 
 import java.sql.Date;
 

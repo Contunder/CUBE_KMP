@@ -4,7 +4,7 @@ import com.example.cube.Model.Catalogue;
 import com.example.cube.Model.Comment;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Data;
 
 import java.util.Set;
 
