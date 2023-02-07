@@ -155,6 +155,34 @@ public class ResourceServiceImpl implements ResourceService {
         return "resource liked : " + like;
     }
 
+    @Override
+    public String setShare(String email, long id, boolean share){
+        User user = userRepository.findUserByEmail(email);
+        Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
+
+        ActivityDto activityDto = new ActivityDto();
+        activityDto.setResource(resource);
+        activityDto.setUser(user);
+        activityDto.setShare(share);
+        activityService.setActivity(activityDto);
+
+        return "resource share : " + share;
+    }
+
+    @Override
+    public String setBlocked(String email, long id, boolean blocked){
+        User user = userRepository.findUserByEmail(email);
+        Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
+
+        ActivityDto activityDto = new ActivityDto();
+        activityDto.setResource(resource);
+        activityDto.setUser(user);
+        activityDto.setBlocked(blocked);
+        activityService.setActivity(activityDto);
+
+        return "resource blocked : " + blocked;
+    }
+
     private ResourceDto mapToDTO(Resource resource){
         ResourceDto resourceDto = new ResourceDto();
         resourceDto.setId(resource.getId());

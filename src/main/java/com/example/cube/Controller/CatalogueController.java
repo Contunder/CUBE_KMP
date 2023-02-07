@@ -1,7 +1,10 @@
 package com.example.cube.Controller;
 
 import com.example.cube.Payload.CatalogueDto;
+import com.example.cube.Security.JwtAuthenticationFilter;
+import com.example.cube.Security.JwtTokenProvider;
 import com.example.cube.Service.CatalogueService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,9 +17,13 @@ import java.util.List;
 public class CatalogueController {
 
     private CatalogueService catalogueService;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtTokenProvider jwtTokenProvider;
 
-    public CatalogueController(CatalogueService catalogueService) {
+    public CatalogueController(CatalogueService catalogueService, JwtAuthenticationFilter jwtAuthenticationFilter, JwtTokenProvider jwtTokenProvider) {
         this.catalogueService = catalogueService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping
@@ -49,5 +56,37 @@ public class CatalogueController {
     public ResponseEntity<String> deleteCatalogue(@PathVariable("id") Long CatalogueId){
         catalogueService.deleteCatalogue(CatalogueId);
         return ResponseEntity.ok("Catalogue deleted successfully!.");
+    }
+
+    @PostMapping("/{id}/view/{boolean}")
+    public ResponseEntity<String> viewResource(HttpServletRequest request, @PathVariable(name = "id") long id, @PathVariable("boolean") boolean view){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(catalogueService.setView(email, id, view), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{id}/like/{boolean}")
+    public ResponseEntity<String> likeResource(HttpServletRequest request, @PathVariable(name = "id") long id, @PathVariable("boolean") boolean like){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(catalogueService.setLike(email, id, like), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{id}/share/{boolean}")
+    public ResponseEntity<String> shareResource(HttpServletRequest request, @PathVariable(name = "id") long id, @PathVariable("boolean") boolean share){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(catalogueService.setShare(email, id, share), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{id}/block/{boolean}")
+    public ResponseEntity<String> blockResource(HttpServletRequest request, @PathVariable(name = "id") long id, @PathVariable("boolean") boolean blocked){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(catalogueService.setBlocked(email, id, blocked), HttpStatus.CREATED);
     }
 }

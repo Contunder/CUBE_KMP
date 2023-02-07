@@ -76,11 +76,35 @@ public class ResourceController {
         return ResponseEntity.ok(ResourceDtos);
     }
 
+    @PostMapping("/api/resources/{id}/view/{boolean}")
+    public ResponseEntity<String> viewResource(HttpServletRequest request, @PathVariable(name = "id") long id, @PathVariable("boolean") boolean view){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(resourceService.setView(email, id, view), HttpStatus.CREATED);
+    }
+
     @PostMapping("/api/resources/{id}/like/{boolean}")
     public ResponseEntity<String> likeResource(HttpServletRequest request, @PathVariable(name = "id") long id, @PathVariable("boolean") boolean like){
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
         String email = jwtTokenProvider.getUsername(token);
 
         return new ResponseEntity<>(resourceService.setLike(email, id, like), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/api/resources/{id}/share/{boolean}")
+    public ResponseEntity<String> shareResource(HttpServletRequest request, @PathVariable(name = "id") long id, @PathVariable("boolean") boolean share){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(resourceService.setShare(email, id, share), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/api/resources/{id}/block/{boolean}")
+    public ResponseEntity<String> blockResource(HttpServletRequest request, @PathVariable(name = "id") long id, @PathVariable("boolean") boolean blocked){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(resourceService.setBlocked(email, id, blocked), HttpStatus.CREATED);
     }
 }

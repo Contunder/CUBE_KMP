@@ -21,4 +21,8 @@ public interface ResourceService {
     String setView(String email, long id, boolean view);
 
     String setLike(String email, long id, boolean like);
+
+    String setShare(String email, long id, boolean share);
+
+    String setBlocked(String email, long id, boolean blocked);
 }
