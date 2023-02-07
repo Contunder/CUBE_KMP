@@ -6,6 +6,7 @@ import com.example.cube.Model.Catalogue;
 import com.example.cube.Model.Resource;
 import com.example.cube.Model.User;
 import com.example.cube.Payload.ActivityDto;
+import com.example.cube.Payload.ResourceDto;
 import com.example.cube.Repository.ActivityRepository;
 import com.example.cube.Repository.CatalogueRepository;
 import com.example.cube.Repository.ResourceRepository;
@@ -13,8 +14,7 @@ import com.example.cube.Repository.UserRepository;
 import com.example.cube.Service.ActivityService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
@@ -33,9 +33,37 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public void setActivity(ActivityDto activityDto) {
-        Activity activity = mapToEntity(activityDto);
-        activityRepository.save(activity);
+    public void setResourceActivity(ActivityDto activityDto) {
+        Activity resourceActivity = activityRepository.getActivityByResource(activityDto.getResource());
+
+        if (Objects.nonNull(resourceActivity)){
+            updateActivity(resourceActivity, activityDto);
+        } else {
+            Activity newActivity = mapToEntity(activityDto);
+            activityRepository.save(newActivity);
+        }
+    }
+
+    @Override
+    public void setCatalogueActivity(ActivityDto activityDto) {
+        Activity catalogueActivity = activityRepository.getActivityByCatalogue(activityDto.getCatalogue());
+
+        if (Objects.nonNull(catalogueActivity.getCatalogue())){
+            updateActivity(catalogueActivity, activityDto);
+        } else {
+            Activity newActivity = mapToEntity(activityDto);
+            activityRepository.save(newActivity);
+        }
+    }
+
+    private Activity updateActivity(Activity activity, ActivityDto activityDto) {
+
+        activity.setView(activityDto.isView());
+        activity.setFavorite(activityDto.isFavorite());
+        activity.setBlocked(activityDto.isBlocked());
+        activity.setShare(activityDto.isShare());
+
+        return activityRepository.save(activity);
     }
 
     @Override
@@ -63,7 +91,7 @@ public class ActivityServiceImpl implements ActivityService {
         User user = userRepository.findUserByEmail(email);
         Catalogue catalogue = catalogueRepository.getCatalogueById(catalogueId);
 
-        return activityRepository.getActivitiesByCatalogue(catalogue).stream()
+        return activityRepository.getActivitiesByCatalogue(Optional.ofNullable(catalogue)).stream()
                 .filter(activity -> activity.getUser().equals(user))
                 .map(this::mapToDTO)
                 .toList();
@@ -152,8 +180,8 @@ public class ActivityServiceImpl implements ActivityService {
         Activity activity = new Activity();
         activity.setId(activityDto.getId());
         activity.setUser(activityDto.getUser());
-        activity.setResource(activityDto.getResource().orElseThrow());
-        activity.setCatalogue(activityDto.getCatalogue().orElseThrow());
+        activity.setResource(activityDto.getResource().orElse(null));
+        activity.setCatalogue(activityDto.getCatalogue().orElse(null));
         activity.setView(activityDto.isView());
         activity.setFavorite(activityDto.isFavorite());
         activity.setCreated(activityDto.isCreated());

@@ -1,12 +1,14 @@
 package com.example.cube.Service.impl;
 
 import com.example.cube.Exception.ResourceNotFoundException;
+import com.example.cube.Model.Activity;
 import com.example.cube.Model.Catalogue;
 import com.example.cube.Model.Resource;
 import com.example.cube.Model.User;
 import com.example.cube.Payload.ActivityDto;
 import com.example.cube.Payload.ResourceDto;
 import com.example.cube.Payload.ResourceResponse;
+import com.example.cube.Repository.ActivityRepository;
 import com.example.cube.Repository.CatalogueRepository;
 import com.example.cube.Repository.ResourceRepository;
 import com.example.cube.Repository.UserRepository;
@@ -18,10 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,15 +31,17 @@ public class ResourceServiceImpl implements ResourceService {
     private CatalogueRepository catalogueRepository;
     private ActivityService activityService;
     private UserRepository userRepository;
+    private ActivityRepository activityRepository;
 
     public ResourceServiceImpl(ResourceRepository resourceRepository,
                                CatalogueRepository catalogueRepository,
                                ActivityService activityService,
-                               UserRepository userRepository) {
+                               UserRepository userRepository, ActivityRepository activityRepository) {
           this.resourceRepository = resourceRepository;
           this.catalogueRepository = catalogueRepository;
           this.activityService = activityService;
           this.userRepository = userRepository;
+          this.activityRepository = activityRepository;
     }
 
     @Override
@@ -58,9 +59,10 @@ public class ResourceServiceImpl implements ResourceService {
 
         ActivityDto activityDto = new ActivityDto();
         activityDto.setResource(Optional.of(newResource));
+        activityDto.setCatalogue(Optional.empty());
         activityDto.setUser(user);
         activityDto.setCreated(true);
-        activityService.setActivity(activityDto);
+        activityService.setResourceActivity(activityDto);
 
         return mapToDTO(newResource);
     }
@@ -133,11 +135,18 @@ public class ResourceServiceImpl implements ResourceService {
         User user = userRepository.findUserByEmail(email);
         Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
 
-        ActivityDto activityDto = new ActivityDto();
-        activityDto.setResource(resource);
-        activityDto.setUser(user);
-        activityDto.setView(view);
-        activityService.setActivity(activityDto);
+        Activity activity = activityRepository.getActivityByResource(resource);
+        if (Objects.isNull(activity)){
+            ActivityDto activityDto = new ActivityDto();
+            activityDto.setResource(resource);
+            activityDto.setCatalogue(Optional.empty());
+            activityDto.setUser(user);
+            activityDto.setView(view);
+            activityService.setResourceActivity(activityDto);
+        } else {
+            activity.setView(view);
+            activityRepository.save(activity);
+        }
 
         return "resource view : " + view;
     }
@@ -146,11 +155,18 @@ public class ResourceServiceImpl implements ResourceService {
         User user = userRepository.findUserByEmail(email);
         Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
 
-        ActivityDto activityDto = new ActivityDto();
-        activityDto.setResource(resource);
-        activityDto.setUser(user);
-        activityDto.setFavorite(like);
-        activityService.setActivity(activityDto);
+        Activity activity = activityRepository.getActivityByResource(resource);
+        if (Objects.isNull(activity)){
+            ActivityDto activityDto = new ActivityDto();
+            activityDto.setResource(resource);
+            activityDto.setCatalogue(Optional.empty());
+            activityDto.setUser(user);
+            activityDto.setFavorite(like);
+            activityService.setResourceActivity(activityDto);
+        } else {
+            activity.setFavorite(like);
+            activityRepository.save(activity);
+        }
 
         return "resource liked : " + like;
     }
@@ -160,11 +176,18 @@ public class ResourceServiceImpl implements ResourceService {
         User user = userRepository.findUserByEmail(email);
         Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
 
-        ActivityDto activityDto = new ActivityDto();
-        activityDto.setResource(resource);
-        activityDto.setUser(user);
-        activityDto.setShare(share);
-        activityService.setActivity(activityDto);
+        Activity activity = activityRepository.getActivityByResource(resource);
+        if (Objects.isNull(activity)){
+            ActivityDto activityDto = new ActivityDto();
+            activityDto.setResource(resource);
+            activityDto.setCatalogue(Optional.empty());
+            activityDto.setUser(user);
+            activityDto.setShare(share);
+            activityService.setResourceActivity(activityDto);
+        } else {
+            activity.setShare(share);
+            activityRepository.save(activity);
+        }
 
         return "resource share : " + share;
     }
@@ -174,11 +197,18 @@ public class ResourceServiceImpl implements ResourceService {
         User user = userRepository.findUserByEmail(email);
         Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
 
-        ActivityDto activityDto = new ActivityDto();
-        activityDto.setResource(resource);
-        activityDto.setUser(user);
-        activityDto.setBlocked(blocked);
-        activityService.setActivity(activityDto);
+        Activity activity = activityRepository.getActivityByResource(resource);
+        if (Objects.isNull(activity)){
+            ActivityDto activityDto = new ActivityDto();
+            activityDto.setResource(resource);
+            activityDto.setCatalogue(Optional.empty());
+            activityDto.setUser(user);
+            activityDto.setBlocked(blocked);
+            activityService.setResourceActivity(activityDto);
+        } else {
+            activity.setBlocked(blocked);
+            activityRepository.save(activity);
+        }
 
         return "resource blocked : " + blocked;
     }

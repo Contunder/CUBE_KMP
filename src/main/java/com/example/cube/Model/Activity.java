@@ -26,10 +26,10 @@ public class Activity {
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "ressource_id")
+    @JoinColumn(name = "ressource_id", nullable = true)
     private Resource resource;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "catalogue_id")
+    @JoinColumn(name = "catalogue_id", nullable = true)
     private Catalogue catalogue;
 }

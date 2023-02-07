@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface ActivityService {
 
-    void setActivity(ActivityDto activityDto);
+    void setResourceActivity(ActivityDto activityDto);
 
+
+    void setCatalogueActivity(ActivityDto activityDto);
 
     List<ActivityDto> getActivityByUser(String email);
 

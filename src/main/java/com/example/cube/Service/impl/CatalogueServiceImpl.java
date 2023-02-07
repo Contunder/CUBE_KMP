@@ -85,7 +85,7 @@ public class CatalogueServiceImpl implements CatalogueService {
         activityDto.setCatalogue(catalogue);
         activityDto.setUser(user);
         activityDto.setView(view);
-        activityService.setActivity(activityDto);
+        activityService.setCatalogueActivity(activityDto);
 
         return "resource view : " + view;
     }
@@ -98,7 +98,7 @@ public class CatalogueServiceImpl implements CatalogueService {
         activityDto.setCatalogue(catalogue);
         activityDto.setUser(user);
         activityDto.setFavorite(like);
-        activityService.setActivity(activityDto);
+        activityService.setCatalogueActivity(activityDto);
 
         return "resource liked : " + like;
     }
@@ -112,7 +112,7 @@ public class CatalogueServiceImpl implements CatalogueService {
         activityDto.setCatalogue(catalogue);
         activityDto.setUser(user);
         activityDto.setShare(share);
-        activityService.setActivity(activityDto);
+        activityService.setCatalogueActivity(activityDto);
 
         return "resource share : " + share;
     }
@@ -126,7 +126,7 @@ public class CatalogueServiceImpl implements CatalogueService {
         activityDto.setCatalogue(catalogue);
         activityDto.setUser(user);
         activityDto.setBlocked(blocked);
-        activityService.setActivity(activityDto);
+        activityService.setCatalogueActivity(activityDto);
 
         return "resource blocked : " + blocked;
     }
