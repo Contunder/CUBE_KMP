@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    private CommentRepository commentRepository;
-    private ResourceRepository resourceRepository;
-    private UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final ResourceRepository resourceRepository;
+    private final UserRepository userRepository;
 
     public CommentServiceImpl(CommentRepository commentRepository, ResourceRepository resourceRepository, UserRepository userRepository) {
         this.commentRepository = commentRepository;
@@ -50,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDto> getCommentsByResourceId(long resourceId) {
         List<Comment> comments = commentRepository.findByResourceId(resourceId);
 
-        return comments.stream().map(comment -> mapToDTO(comment)).collect(Collectors.toList());
+        return comments.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -105,8 +105,6 @@ public class CommentServiceImpl implements CommentService {
     private CommentDto mapToDTO(Comment comment){
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
-        commentDto.setUser(comment.getUser());
-        commentDto.setResource(comment.getResource());
         commentDto.setValue(comment.getValue());
 
         return  commentDto;
@@ -115,8 +113,6 @@ public class CommentServiceImpl implements CommentService {
     private Comment mapToEntity(CommentDto commentDto){
         Comment comment = new Comment();
         comment.setId(commentDto.getId());
-        comment.setUser(commentDto.getUser());
-        comment.setResource(commentDto.getResource());
         comment.setValue(commentDto.getValue());
 
         return  comment;
