@@ -7,6 +7,8 @@ import java.util.List;
 public interface CommentService {
     CommentDto createComment(String email, long resourceId, CommentDto commentDto);
 
+    CommentDto createResponseComment(String email, long resourceId, long commentId, CommentDto commentDto);
+
     List<CommentDto> getCommentsByResourceId(long resourceId);
 
     CommentDto getCommentById(Long resourceId, Long commentId);

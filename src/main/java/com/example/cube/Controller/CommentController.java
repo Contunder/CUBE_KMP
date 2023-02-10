@@ -43,6 +43,17 @@ public class CommentController {
         return new ResponseEntity<>(commentService.createComment(email, resourceId, commentDto), HttpStatus.CREATED);
     }
 
+    @PostMapping("/{resourceId}/comments/response/{id}")
+    public ResponseEntity<CommentDto> createResponseComment(HttpServletRequest request,
+                                                    @PathVariable(value = "resourceId") long resourceId,
+                                                    @PathVariable(value = "id") long commentId,
+                                                    @Valid @RequestBody CommentDto commentDto){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(commentService.createResponseComment(email, resourceId, commentId, commentDto), HttpStatus.CREATED);
+    }
+
     @GetMapping("/{resourceId}/comments")
     public List<CommentDto> getCommentsByPostId(@PathVariable(value = "resourceId") Long resourceId){
         return commentService.getCommentsByResourceId(resourceId);

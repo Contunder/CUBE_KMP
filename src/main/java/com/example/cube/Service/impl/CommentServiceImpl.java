@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +38,25 @@ public class CommentServiceImpl implements CommentService {
         User user = userRepository.findUserByEmail(email);
 
         comment.setResource(resource);
+        comment.setUser(user);
+
+        Comment newComment =  commentRepository.save(comment);
+
+        return mapToDTO(newComment);
+    }
+
+    @Override
+    public CommentDto createResponseComment(String email, long resourceId, long commentId, CommentDto commentDto) {
+
+        Comment comment = mapToEntity(commentDto);
+        Resource resource = resourceRepository.findById(resourceId).orElseThrow(
+                () -> new ResourceNotFoundException("Resources", "id", resourceId));
+        Comment relatedComment = commentRepository.findById(commentId).orElseThrow(
+                () -> new ResourceNotFoundException("Comment", "id", commentId));
+        User user = userRepository.findUserByEmail(email);
+
+        comment.setResource(resource);
+        comment.setComment(relatedComment);
         comment.setUser(user);
 
         Comment newComment =  commentRepository.save(comment);
@@ -119,7 +137,6 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = new Comment();
         comment.setId(commentDto.getId());
         comment.setUser(commentDto.getUser());
-        comment.setResource(commentDto.getResource());
         comment.setValue(commentDto.getValue());
 
         return  comment;
