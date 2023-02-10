@@ -14,7 +14,7 @@ public interface FriendService {
 
     List<FriendDto> getFriendsByRelation(String email, String relation);
 
-    String setFriendsByEmail(String userEmail, String friendEmail, String relation);
+    String setFriendsById(String userEmail, long friendId, String relation);
 
     String setActiveFriendsByEmail(String userEmail, String friendEmail, String relation);
 }

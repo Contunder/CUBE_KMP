@@ -68,9 +68,9 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public String setFriendsByEmail(String userEmail, String friendEmail, String relation) {
+    public String setFriendsById(String userEmail, long friendId, String relation) {
         User user = userRepository.findUserByEmail(userEmail);
-        User friend = userRepository.findUserByEmail(friendEmail);
+        User friend = userRepository.findUserById(friendId);
 
         Friend newFriend = new Friend();
         newFriend.setUser(user);
