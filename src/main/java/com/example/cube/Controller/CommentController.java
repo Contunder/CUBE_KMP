@@ -43,7 +43,7 @@ public class CommentController {
         return new ResponseEntity<>(commentService.createComment(email, resourceId, commentDto), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{resourceId}/comments/response/{id}")
+    @PostMapping("/{resourceId}/comments/{id}/response")
     public ResponseEntity<CommentDto> createResponseComment(HttpServletRequest request,
                                                     @PathVariable(value = "resourceId") long resourceId,
                                                     @PathVariable(value = "id") long commentId,
