@@ -10,6 +10,8 @@ public interface FriendService {
 
     List<FriendDto> getActiveFriendsByUserEmail(String email);
 
+    List<FriendDto> getActiveFriendsByFriendId(String email, long friendId);
+
     List<FriendRequest> getRequestFriendsByUserEmail(String email);
 
     List<FriendDto> getFriendsByRelation(String email, String relation);

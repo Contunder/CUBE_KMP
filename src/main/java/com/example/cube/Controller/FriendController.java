@@ -46,11 +46,19 @@ public class FriendController {
     }
 
     @GetMapping(value = {"/user/active"})
-    public ResponseEntity<List<FriendDto>> getFriendsActiveById(HttpServletRequest request) {
+    public ResponseEntity<List<FriendDto>> getFriendsActive(HttpServletRequest request) {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
         String email = jwtTokenProvider.getUsername(token);
 
         return ResponseEntity.ok(friendService.getActiveFriendsByUserEmail(email));
+    }
+
+    @GetMapping(value = {"/user/active/{id}"})
+    public ResponseEntity<List<FriendDto>> getFriendsActiveById(HttpServletRequest request, @PathVariable("id") long friendId) {
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return ResponseEntity.ok(friendService.getActiveFriendsByFriendId(email, friendId));
     }
 
     @GetMapping(value = {"/relation/{relation}"})

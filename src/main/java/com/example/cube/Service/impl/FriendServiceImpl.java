@@ -46,6 +46,18 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
+    public List<FriendDto> getActiveFriendsByFriendId(String email, long friendId) {
+        User user = userRepository.findUserByEmail(email);
+        List<Friend> friend = friendRepository.getFriendsByUser(user);
+
+        return friend.stream()
+                .map(this::mapToDTO)
+                .filter(friendDto -> friendDto.getFriend().getId() == friendId)
+                .filter(FriendDto::isActive)
+                .toList();
+    }
+
+    @Override
     public List<FriendRequest> getRequestFriendsByUserEmail(String email) {
         User user = userRepository.findUserByEmail(email);
         List<Friend> friendRequest = friendRepository.getFriendsRequestByFriend(user);
