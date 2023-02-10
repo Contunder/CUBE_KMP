@@ -37,7 +37,7 @@ public class FriendController {
         return ResponseEntity.ok(friendService.getFriendsByUserEmail(email));
     }
 
-    @GetMapping(value = {"/request/"})
+    @GetMapping(value = {"/request"})
     public ResponseEntity<List<FriendRequest>> getFriendsRequestById(HttpServletRequest request) {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
         String email = jwtTokenProvider.getUsername(token);
