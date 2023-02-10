@@ -54,7 +54,7 @@ public class FriendController {
     }
 
     @GetMapping(value = {"/relation/{relation}"})
-    public ResponseEntity<List<FriendDto>> getFriendById(HttpServletRequest request, @PathVariable("relation") String relation) {
+    public ResponseEntity<List<FriendDto>> getFriendByRelation(HttpServletRequest request, @PathVariable("relation") String relation) {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
         String email = jwtTokenProvider.getUsername(token);
 
@@ -62,7 +62,7 @@ public class FriendController {
     }
 
     @PostMapping(value = {"/add/{friendId}/{relation}"})
-    public ResponseEntity<String> setFriendsByEmail(HttpServletRequest request, @PathVariable("friendId") long friendId, @PathVariable("relation") String relation) {
+    public ResponseEntity<String> setFriendsById(HttpServletRequest request, @PathVariable("friendId") long friendId, @PathVariable("relation") String relation) {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
         String email = jwtTokenProvider.getUsername(token);
 
