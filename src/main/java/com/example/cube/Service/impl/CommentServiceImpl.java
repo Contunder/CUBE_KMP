@@ -103,8 +103,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private CommentDto mapToDTO(Comment comment){
+        comment.getUser().setPassword(null);
+        comment.getUser().setRoles(null);
+        comment.getUser().setFriends(null);
+
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
+        commentDto.setUser(comment.getUser());
         commentDto.setValue(comment.getValue());
 
         return  commentDto;
@@ -113,6 +118,8 @@ public class CommentServiceImpl implements CommentService {
     private Comment mapToEntity(CommentDto commentDto){
         Comment comment = new Comment();
         comment.setId(commentDto.getId());
+        comment.setUser(commentDto.getUser());
+        comment.setResource(commentDto.getResource());
         comment.setValue(commentDto.getValue());
 
         return  comment;
