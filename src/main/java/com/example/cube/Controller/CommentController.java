@@ -1,7 +1,10 @@
 package com.example.cube.Controller;
 
 import com.example.cube.Payload.CommentDto;
+import com.example.cube.Security.JwtAuthenticationFilter;
+import com.example.cube.Security.JwtTokenProvider;
 import com.example.cube.Service.CommentService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +24,23 @@ import java.util.List;
 public class CommentController {
 
     private CommentService commentService;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtTokenProvider jwtTokenProvider;
 
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentService commentService, JwtAuthenticationFilter jwtAuthenticationFilter, JwtTokenProvider jwtTokenProvider) {
         this.commentService = commentService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/{resourceId}/comments")
-    public ResponseEntity<CommentDto> createComment(@PathVariable(value = "resourceId") long resourceId,
+    public ResponseEntity<CommentDto> createComment(HttpServletRequest request,
+                                                    @PathVariable(value = "resourceId") long resourceId,
                                                     @Valid @RequestBody CommentDto commentDto){
-        return new ResponseEntity<>(commentService.createComment(resourceId, commentDto), HttpStatus.CREATED);
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return new ResponseEntity<>(commentService.createComment(email, resourceId, commentDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{resourceId}/comments")

@@ -13,8 +13,8 @@ import com.example.cube.Service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.security.Security;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,13 +31,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto createComment(long resourceId, CommentDto commentDto) {
+    public CommentDto createComment(String email, long resourceId, CommentDto commentDto) {
 
         Comment comment = mapToEntity(commentDto);
         Resource resource = resourceRepository.findById(resourceId).orElseThrow(
                 () -> new ResourceNotFoundException("Resources", "id", resourceId));
-        User user = userRepository.findByEmail("valentin.denavaut@hotmail.fr").orElseThrow(
-                () -> new ResourceNotFoundException("Resources", "id", resourceId));
+        User user = userRepository.findUserByEmail(email);
 
         comment.setResource(resource);
         comment.setUser(user);
@@ -106,6 +105,8 @@ public class CommentServiceImpl implements CommentService {
     private CommentDto mapToDTO(Comment comment){
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
+        commentDto.setUser(comment.getUser());
+        commentDto.setResource(comment.getResource());
         commentDto.setValue(comment.getValue());
 
         return  commentDto;
@@ -114,6 +115,8 @@ public class CommentServiceImpl implements CommentService {
     private Comment mapToEntity(CommentDto commentDto){
         Comment comment = new Comment();
         comment.setId(commentDto.getId());
+        comment.setUser(commentDto.getUser());
+        comment.setResource(commentDto.getResource());
         comment.setValue(commentDto.getValue());
 
         return  comment;

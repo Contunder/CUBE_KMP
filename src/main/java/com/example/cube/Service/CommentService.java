@@ -5,7 +5,7 @@ import com.example.cube.Payload.CommentDto;
 import java.util.List;
 
 public interface CommentService {
-    CommentDto createComment(long resourceId, CommentDto commentDto);
+    CommentDto createComment(String email, long resourceId, CommentDto commentDto);
 
     List<CommentDto> getCommentsByResourceId(long resourceId);
 
