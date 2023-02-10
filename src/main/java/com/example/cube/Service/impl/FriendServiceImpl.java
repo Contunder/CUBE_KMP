@@ -84,13 +84,13 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public String setActiveFriendsByEmail(String userEmail, String friendEmail, String relation) {
+    public String setActiveFriendsById(String userEmail, long friendId, String relation) {
 
         User user = userRepository.findUserByEmail(userEmail);
         List<Friend> friendRequest = friendRepository.getFriendsRequestByFriend(user);
-        Optional<Friend> providerFriend = friendRequest.stream().filter(friend -> friend.getUser().getEmail().equals(friendEmail)).findFirst();
+        Optional<Friend> providerFriend = friendRequest.stream().filter(friend -> friend.getUser().getId() == friendId).findFirst();
 
-        User friend = userRepository.findUserByEmail(friendEmail);
+        User friend = userRepository.findUserById(friendId);
 
         Friend newFriend = new Friend();
         newFriend.setUser(user);

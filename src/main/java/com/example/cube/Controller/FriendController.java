@@ -69,12 +69,12 @@ public class FriendController {
         return ResponseEntity.ok(friendService.setFriendsById(email, friendId, relation));
     }
 
-    @PostMapping(value = {"/request/add/{email}/{relation}"})
-    public ResponseEntity<String> setFriendsByRequest( HttpServletRequest request, @PathVariable("email") String friendEmail, @PathVariable("relation") String relation) {
+    @PostMapping(value = {"/request/add/{friendId}/{relation}"})
+    public ResponseEntity<String> setFriendsByRequest( HttpServletRequest request, @PathVariable("friendId") long friendId, @PathVariable("relation") String relation) {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);
         String email = jwtTokenProvider.getUsername(token);
 
-        return ResponseEntity.ok(friendService.setActiveFriendsByEmail(email, friendEmail, relation));
+        return ResponseEntity.ok(friendService.setActiveFriendsById(email, friendId, relation));
     }
 
 }
