@@ -99,19 +99,15 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public List<ResourceDto> getResourceByUserId(long id) {
         User user = userRepository.findUserById(id);
-        List<Resource> resources = resourceRepository.findAll();
+        List<Resource> resources = new ArrayList<>();
         List<Activity> activitys = activityRepository.getActivitiesByUser(user);
 
+        List<Resource> finalResources = resources;
         activitys.stream()
                 .filter(Activity::isCreated)
-                .toList();
+                .filter(activity -> Objects.nonNull(activity.getResource()))
+                .forEach(activity -> finalResources.add(resourceRepository.getResourceByIdOrderById(activity.getResource().getId())));
 
-        resources.stream()
-                .filter(resource -> activitys.stream()
-                        .filter(activity -> resource.getId() == activity.getResource().getId())
-                        .isParallel()
-                )
-                .toList();
 
         return resources.stream().map(this::mapToDTO).toList();
     }
@@ -120,27 +116,22 @@ public class ResourceServiceImpl implements ResourceService {
     public List<ResourceDto> getResourceByRelation(String email, String relation) {
         User user = userRepository.findUserByEmail(email);
         List<Friend> friends = friendRepository.getFriendsByUser(user);
-        List<Resource> resources = resourceRepository.findAll();
+        List<Resource> resources = new ArrayList<>();
         List<Activity> activitys = activityRepository.findAll();
 
-        friends.stream()
+        List<Activity> finalActivitys = activitys;
+        activitys = friends.stream()
                 .filter(friend -> friend.getRelation().equals(relation))
                 .filter(friend -> friend.getUser().equals(user))
+                .map(friend -> friend.getFriend().getId())
+                .flatMap(id -> finalActivitys.stream().filter(activity -> Long.valueOf(activity.getUser().getId()).equals(id)))
                 .toList();
 
-        activitys.stream()
+        activitys = activitys.stream()
                 .filter(Activity::isCreated)
-                .filter(activity -> friends.stream()
-                        .filter(friend -> activity.getUser().getId() == friend.getFriend().getId())
-                        .isParallel()
-                )
                 .toList();
 
-        resources.stream()
-                .filter(resource -> activitys.stream()
-                        .filter(activity -> resource.getId() == activity.getResource().getId())
-                        .isParallel())
-                .toList();
+        activitys.forEach(activity -> resources.add(resourceRepository.getResourceByIdOrderById(activity.getResource().getId())));
 
         return resources.stream().map(this::mapToDTO).toList();
     }

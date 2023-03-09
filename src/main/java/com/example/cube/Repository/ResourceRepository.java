@@ -12,6 +12,7 @@ import java.util.Set;
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
 
     Optional<Resource> getResourceById(Long id);
+    Resource getResourceByIdOrderById(Long id);
     Set<Resource> findAllByCatalogueIdIn(Collection<Long> catalogue_id);
 
 }
