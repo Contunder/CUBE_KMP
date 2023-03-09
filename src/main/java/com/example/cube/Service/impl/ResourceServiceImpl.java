@@ -124,9 +124,9 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public List<ResourceDto> getResourcesByCategory(Long catalogueId) {
 
-        Optional<Resource> resources = resourceRepository.getResourceById(catalogueId);
+        Set<Resource> resources = resourceRepository.findAllByCatalogueIdIn(Collections.singleton(catalogueId));
 
-        return resources.stream().map((resource) -> mapToDTO(resource))
+        return resources.stream().map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 

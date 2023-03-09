@@ -38,6 +38,6 @@ public class Resource {
             joinColumns = @JoinColumn(name = "resource_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "catalogue_id", referencedColumnName = "id")
     )
-    private Set<Catalogue> Catalogue;
+    private Set<Catalogue> catalogue;
 
 }
