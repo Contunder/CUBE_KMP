@@ -19,6 +19,14 @@
 
 - mvn clean install
 
+## SWAGGER AT 
+
+- http://localhost:8080/swagger-ui.html
+
+## PostMan files
+
+- CUBE_API.postman_collection.json
+
 ## REGISTER TO API
 
 - Entry point : /api/auth/register
