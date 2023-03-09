@@ -43,6 +43,13 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.getActivityByResource(email, resourceId));
     }
 
+    @GetMapping(value = {"/resource/create/{id}"})
+    public ResponseEntity<List<ActivityDto>> getActivityByResourceCreate(@PathVariable(value = "id") long resourceId, HttpServletRequest request) {
+
+        return ResponseEntity.ok(activityService.getActivityByResourceCreate(resourceId));
+    }
+
+
     @GetMapping(value = {"/catalogue/{id}"})
     public ResponseEntity<List<ActivityDto>> getActivityByCatalogue(@PathVariable(value = "id") long catalogueId, HttpServletRequest request) {
         String token = jwtAuthenticationFilter.getTokenFromRequest(request);

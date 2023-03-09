@@ -77,6 +77,16 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public List<ActivityDto> getActivityByResourceCreate(long resourceId){
+        Optional<Resource> resource = resourceRepository.getResourceById(resourceId);
+
+        return activityRepository.getActivitiesByResource(resource).stream()
+                .filter(Activity::isCreated)
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    @Override
     public List<ActivityDto> getActivityByCatalogue(String email, long catalogueId){
         User user = userRepository.findUserByEmail(email);
         Catalogue catalogue = catalogueRepository.getCatalogueById(catalogueId);

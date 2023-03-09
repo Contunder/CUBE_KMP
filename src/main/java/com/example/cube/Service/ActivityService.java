@@ -15,6 +15,8 @@ public interface ActivityService {
 
     List<ActivityDto> getActivityByResource(String email, long resourceId);
 
+    List<ActivityDto> getActivityByResourceCreate(long resourceId);
+
     List<ActivityDto> getActivityByCatalogue(String email, long catalogueId);
 
     List<ActivityDto> getViewedActivityByUser(String email);
