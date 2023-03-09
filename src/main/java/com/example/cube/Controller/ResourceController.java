@@ -65,6 +65,14 @@ public class ResourceController {
         return ResponseEntity.ok(resourceService.getResourceByUserId(relationId));
     }
 
+    @GetMapping(value = "/api/resources/relation/{relation}")
+    public ResponseEntity<List<ResourceDto>> getResourceByRelationId(HttpServletRequest request, @PathVariable(name = "relation") String relation){
+        String token = jwtAuthenticationFilter.getTokenFromRequest(request);
+        String email = jwtTokenProvider.getUsername(token);
+
+        return ResponseEntity.ok(resourceService.getResourceByRelation(email, relation));
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/api/resources/{id}/{catalogueId}")
     public ResponseEntity<ResourceDto> updateResource(@Valid @RequestBody ResourceDto resourceDto, @PathVariable(name = "id") long id, @PathVariable(name = "catalogueId") long catalogueId){

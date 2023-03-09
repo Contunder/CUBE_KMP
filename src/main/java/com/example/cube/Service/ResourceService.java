@@ -14,6 +14,8 @@ public interface ResourceService {
 
     List<ResourceDto> getResourceByUserId(long id);
 
+    List<ResourceDto> getResourceByRelation(String email, String relation);
+
     ResourceDto updateResource(ResourceDto resourceDto, long id, long catalogueId);
 
     void deleteResourceById(long id);

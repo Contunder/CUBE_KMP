@@ -1,17 +1,11 @@
 package com.example.cube.Service.impl;
 
 import com.example.cube.Exception.ResourceNotFoundException;
-import com.example.cube.Model.Activity;
-import com.example.cube.Model.Catalogue;
-import com.example.cube.Model.Resource;
-import com.example.cube.Model.User;
+import com.example.cube.Model.*;
 import com.example.cube.Payload.ActivityDto;
 import com.example.cube.Payload.ResourceDto;
 import com.example.cube.Payload.ResourceResponse;
-import com.example.cube.Repository.ActivityRepository;
-import com.example.cube.Repository.CatalogueRepository;
-import com.example.cube.Repository.ResourceRepository;
-import com.example.cube.Repository.UserRepository;
+import com.example.cube.Repository.*;
 import com.example.cube.Service.ActivityService;
 import com.example.cube.Service.ResourceService;
 import org.springframework.data.domain.Page;
@@ -31,16 +25,20 @@ public class ResourceServiceImpl implements ResourceService {
     private CatalogueRepository catalogueRepository;
     private ActivityService activityService;
     private UserRepository userRepository;
+    private FriendRepository friendRepository;
     private ActivityRepository activityRepository;
 
     public ResourceServiceImpl(ResourceRepository resourceRepository,
                                CatalogueRepository catalogueRepository,
                                ActivityService activityService,
-                               UserRepository userRepository, ActivityRepository activityRepository) {
+                               UserRepository userRepository,
+                               FriendRepository friendRepository,
+                               ActivityRepository activityRepository) {
           this.resourceRepository = resourceRepository;
           this.catalogueRepository = catalogueRepository;
           this.activityService = activityService;
           this.userRepository = userRepository;
+          this.friendRepository = friendRepository;
           this.activityRepository = activityRepository;
     }
 
@@ -110,7 +108,38 @@ public class ResourceServiceImpl implements ResourceService {
 
         resources.stream()
                 .filter(resource -> activitys.stream()
-                        .filter(activity -> resource.getId() == activity.getResource().getId()).isParallel())
+                        .filter(activity -> resource.getId() == activity.getResource().getId())
+                        .isParallel()
+                )
+                .toList();
+
+        return resources.stream().map(this::mapToDTO).toList();
+    }
+
+    @Override
+    public List<ResourceDto> getResourceByRelation(String email, String relation) {
+        User user = userRepository.findUserByEmail(email);
+        List<Friend> friends = friendRepository.getFriendsByUser(user);
+        List<Resource> resources = resourceRepository.findAll();
+        List<Activity> activitys = activityRepository.findAll();
+
+        friends.stream()
+                .filter(friend -> friend.getRelation().equals(relation))
+                .filter(friend -> friend.getUser().equals(user))
+                .toList();
+
+        activitys.stream()
+                .filter(Activity::isCreated)
+                .filter(activity -> friends.stream()
+                        .filter(friend -> activity.getUser().getId() == friend.getFriend().getId())
+                        .isParallel()
+                )
+                .toList();
+
+        resources.stream()
+                .filter(resource -> activitys.stream()
+                        .filter(activity -> resource.getId() == activity.getResource().getId())
+                        .isParallel())
                 .toList();
 
         return resources.stream().map(this::mapToDTO).toList();
