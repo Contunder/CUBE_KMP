@@ -12,6 +12,8 @@ public interface ResourceService {
 
     ResourceDto getResourceById(long id);
 
+    List<ResourceDto> getResourceByUserId(long id);
+
     ResourceDto updateResource(ResourceDto resourceDto, long id, long catalogueId);
 
     void deleteResourceById(long id);

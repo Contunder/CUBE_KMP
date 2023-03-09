@@ -60,6 +60,11 @@ public class ResourceController {
         return ResponseEntity.ok(resourceService.getResourceById(id));
     }
 
+    @GetMapping(value = "/api/resources/user/{id}")
+    public ResponseEntity<List<ResourceDto>> getResourceByRelationId(@PathVariable(name = "id") long relationId){
+        return ResponseEntity.ok(resourceService.getResourceByUserId(relationId));
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/api/resources/{id}/{catalogueId}")
     public ResponseEntity<ResourceDto> updateResource(@Valid @RequestBody ResourceDto resourceDto, @PathVariable(name = "id") long id, @PathVariable(name = "catalogueId") long catalogueId){

@@ -99,6 +99,24 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
+    public List<ResourceDto> getResourceByUserId(long id) {
+        User user = userRepository.findUserById(id);
+        List<Resource> resources = resourceRepository.findAll();
+        List<Activity> activitys = activityRepository.getActivitiesByUser(user);
+
+        activitys.stream()
+                .filter(Activity::isCreated)
+                .toList();
+
+        resources.stream()
+                .filter(resource -> activitys.stream()
+                        .filter(activity -> resource.getId() == activity.getResource().getId()).isParallel())
+                .toList();
+
+        return resources.stream().map(this::mapToDTO).toList();
+    }
+
+    @Override
     public ResourceDto updateResource(ResourceDto resourceDto, long id, long catalogueId) {
 
         Resource resource = resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id));
