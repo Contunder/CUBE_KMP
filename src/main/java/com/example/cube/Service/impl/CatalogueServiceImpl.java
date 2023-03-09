@@ -8,7 +8,7 @@ import com.example.cube.Model.User;
 import com.example.cube.Payload.ActivityDto;
 import com.example.cube.Payload.CatalogueDto;
 import com.example.cube.Repository.ActivityRepository;
-import com.example.cube.Repository.AnalitycsRepository;
+import com.example.cube.Repository.AnalyticsRepository;
 import com.example.cube.Repository.CatalogueRepository;
 import com.example.cube.Repository.UserRepository;
 import com.example.cube.Service.ActivityService;
@@ -27,13 +27,13 @@ public class CatalogueServiceImpl implements CatalogueService {
     private CatalogueRepository catalogueRepository;
     private ActivityService activityService;
     private UserRepository userRepository;
-    private AnalitycsRepository analyticsRepository;
+    private AnalyticsRepository analyticsRepository;
     private ActivityRepository activityRepository;
 
     public CatalogueServiceImpl(CatalogueRepository catalogueRepository,
                                 ActivityService activityService,
                                 ActivityRepository activityRepository,
-                                AnalitycsRepository analyticsRepository,
+                                AnalyticsRepository analyticsRepository,
                                 UserRepository userRepository) {
         this.catalogueRepository = catalogueRepository;
         this.activityService = activityService;
@@ -108,14 +108,14 @@ public class CatalogueServiceImpl implements CatalogueService {
             activityRepository.save(activity);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
         if(Objects.nonNull(analytics)){
             analytics.setView(analytics.getView() + 1);
             analyticsRepository.save(analytics);
         } else {
             analytics = new Analytics();
             analytics.setView(1);
-            analytics.setDate(getDate());
+            analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
         }
 
@@ -139,14 +139,14 @@ public class CatalogueServiceImpl implements CatalogueService {
             activityRepository.save(activity);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
         if(Objects.nonNull(analytics)){
             analytics.setFavorite(analytics.getFavorite() + 1);
             analyticsRepository.save(analytics);
         } else {
             analytics = new Analytics();
             analytics.setFavorite(1);
-            analytics.setDate(getDate());
+            analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
         }
 
@@ -171,14 +171,14 @@ public class CatalogueServiceImpl implements CatalogueService {
             activityRepository.save(activity);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
         if(Objects.nonNull(analytics)){
             analytics.setShare(analytics.getShare() + 1);
             analyticsRepository.save(analytics);
         } else {
             analytics = new Analytics();
             analytics.setShare(1);
-            analytics.setDate(getDate());
+            analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
         }
 
@@ -203,14 +203,14 @@ public class CatalogueServiceImpl implements CatalogueService {
             activityRepository.save(activity);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
         if(Objects.nonNull(analytics)){
             analytics.setBlocked(analytics.getBlocked() + 1);
             analyticsRepository.save(analytics);
         } else {
             analytics = new Analytics();
             analytics.setBlocked(1);
-            analytics.setDate(getDate());
+            analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
         }
 
@@ -230,7 +230,7 @@ public class CatalogueServiceImpl implements CatalogueService {
         return catalogue;
     }
 
-    private Date getDate(){
+    private Date getSQLDate(){
         java.util.Date todayJava = new java.util.Date();
         return new Date(todayJava.getDate());
     }

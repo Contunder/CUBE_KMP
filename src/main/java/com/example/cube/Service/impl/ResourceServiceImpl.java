@@ -11,7 +11,7 @@ import com.example.cube.Payload.ActivityDto;
 import com.example.cube.Payload.ResourceDto;
 import com.example.cube.Payload.ResourceResponse;
 import com.example.cube.Repository.ActivityRepository;
-import com.example.cube.Repository.AnalitycsRepository;
+import com.example.cube.Repository.AnalyticsRepository;
 import com.example.cube.Repository.CatalogueRepository;
 import com.example.cube.Repository.FriendRepository;
 import com.example.cube.Repository.ResourceRepository;
@@ -43,7 +43,7 @@ public class ResourceServiceImpl implements ResourceService {
     private ActivityService activityService;
     private UserRepository userRepository;
     private FriendRepository friendRepository;
-    private AnalitycsRepository analyticsRepository;
+    private AnalyticsRepository analyticsRepository;
     private ActivityRepository activityRepository;
 
     public ResourceServiceImpl(ResourceRepository resourceRepository,
@@ -51,7 +51,7 @@ public class ResourceServiceImpl implements ResourceService {
                                ActivityService activityService,
                                UserRepository userRepository,
                                FriendRepository friendRepository,
-                               AnalitycsRepository analyticsRepository,
+                               AnalyticsRepository analyticsRepository,
                                ActivityRepository activityRepository) {
           this.resourceRepository = resourceRepository;
           this.catalogueRepository = catalogueRepository;
@@ -73,14 +73,14 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setCatalogue(catalogue);
         Resource newResource = resourceRepository.save(resource);
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
         if(Objects.nonNull(analytics)){
             analytics.setCreated(analytics.getCreated() + 1);
             analyticsRepository.save(analytics);
         } else {
             analytics = new Analytics();
             analytics.setCreated(1);
-            analytics.setDate(getDate());
+            analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
         }
 
@@ -217,14 +217,14 @@ public class ResourceServiceImpl implements ResourceService {
             activityRepository.save(activity);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
         if(Objects.nonNull(analytics)){
             analytics.setView(analytics.getView() + 1);
             analyticsRepository.save(analytics);
         } else {
             analytics = new Analytics();
             analytics.setView(1);
-            analytics.setDate(getDate());
+            analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
         }
 
@@ -248,14 +248,14 @@ public class ResourceServiceImpl implements ResourceService {
             activityRepository.save(activity);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
         if(Objects.nonNull(analytics)){
             analytics.setFavorite(analytics.getFavorite() + 1);
             analyticsRepository.save(analytics);
         } else {
             analytics = new Analytics();
             analytics.setFavorite(1);
-            analytics.setDate(getDate());
+            analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
         }
 
@@ -280,14 +280,14 @@ public class ResourceServiceImpl implements ResourceService {
             activityRepository.save(activity);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
         if(Objects.nonNull(analytics)){
             analytics.setShare(analytics.getShare() + 1);
             analyticsRepository.save(analytics);
         } else {
             analytics = new Analytics();
             analytics.setShare(1);
-            analytics.setDate(getDate());
+            analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
         }
 
@@ -312,14 +312,14 @@ public class ResourceServiceImpl implements ResourceService {
             activityRepository.save(activity);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
         if(Objects.nonNull(analytics)){
             analytics.setBlocked(analytics.getBlocked() + 1);
             analyticsRepository.save(analytics);
         } else {
             analytics = new Analytics();
             analytics.setBlocked(1);
-            analytics.setDate(getDate());
+            analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
         }
 
@@ -344,7 +344,7 @@ public class ResourceServiceImpl implements ResourceService {
         return resource;
     }
 
-    private Date getDate(){
+    private Date getSQLDate(){
         java.util.Date todayJava = new java.util.Date();
         return new Date(todayJava.getDate());
     }
