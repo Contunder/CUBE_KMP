@@ -2,17 +2,20 @@ package com.example.cube.Service.impl;
 
 import com.example.cube.Exception.ResourceNotFoundException;
 import com.example.cube.Model.Activity;
+import com.example.cube.Model.Analytics;
 import com.example.cube.Model.Catalogue;
 import com.example.cube.Model.User;
 import com.example.cube.Payload.ActivityDto;
 import com.example.cube.Payload.CatalogueDto;
 import com.example.cube.Repository.ActivityRepository;
+import com.example.cube.Repository.AnalitycsRepository;
 import com.example.cube.Repository.CatalogueRepository;
 import com.example.cube.Repository.UserRepository;
 import com.example.cube.Service.ActivityService;
 import com.example.cube.Service.CatalogueService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,12 +27,18 @@ public class CatalogueServiceImpl implements CatalogueService {
     private CatalogueRepository catalogueRepository;
     private ActivityService activityService;
     private UserRepository userRepository;
+    private AnalitycsRepository analyticsRepository;
     private ActivityRepository activityRepository;
 
-    public CatalogueServiceImpl(CatalogueRepository catalogueRepository, ActivityService activityService, ActivityRepository activityRepository, UserRepository userRepository) {
+    public CatalogueServiceImpl(CatalogueRepository catalogueRepository,
+                                ActivityService activityService,
+                                ActivityRepository activityRepository,
+                                AnalitycsRepository analyticsRepository,
+                                UserRepository userRepository) {
         this.catalogueRepository = catalogueRepository;
         this.activityService = activityService;
         this.activityRepository = activityRepository;
+        this.analyticsRepository = analyticsRepository;
         this.userRepository = userRepository;
     }
 
@@ -99,6 +108,17 @@ public class CatalogueServiceImpl implements CatalogueService {
             activityRepository.save(activity);
         }
 
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        if(Objects.nonNull(analytics)){
+            analytics.setView(analytics.getView() + 1);
+            analyticsRepository.save(analytics);
+        } else {
+            analytics = new Analytics();
+            analytics.setView(1);
+            analytics.setDate(getDate());
+            analyticsRepository.save(analytics);
+        }
+
         return "resource view : " + view;
     }
     @Override
@@ -117,6 +137,17 @@ public class CatalogueServiceImpl implements CatalogueService {
         } else {
             activity.setFavorite(like);
             activityRepository.save(activity);
+        }
+
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        if(Objects.nonNull(analytics)){
+            analytics.setFavorite(analytics.getFavorite() + 1);
+            analyticsRepository.save(analytics);
+        } else {
+            analytics = new Analytics();
+            analytics.setFavorite(1);
+            analytics.setDate(getDate());
+            analyticsRepository.save(analytics);
         }
 
         return "resource liked : " + like;
@@ -140,6 +171,17 @@ public class CatalogueServiceImpl implements CatalogueService {
             activityRepository.save(activity);
         }
 
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        if(Objects.nonNull(analytics)){
+            analytics.setShare(analytics.getShare() + 1);
+            analyticsRepository.save(analytics);
+        } else {
+            analytics = new Analytics();
+            analytics.setShare(1);
+            analytics.setDate(getDate());
+            analyticsRepository.save(analytics);
+        }
+
         return "resource share : " + share;
     }
 
@@ -161,6 +203,17 @@ public class CatalogueServiceImpl implements CatalogueService {
             activityRepository.save(activity);
         }
 
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        if(Objects.nonNull(analytics)){
+            analytics.setBlocked(analytics.getBlocked() + 1);
+            analyticsRepository.save(analytics);
+        } else {
+            analytics = new Analytics();
+            analytics.setBlocked(1);
+            analytics.setDate(getDate());
+            analyticsRepository.save(analytics);
+        }
+
         return "resource blocked : " + blocked;
     }
 
@@ -175,5 +228,10 @@ public class CatalogueServiceImpl implements CatalogueService {
         Catalogue catalogue = new Catalogue();
         catalogue.setCategory(catalogueDto.getCategory());
         return catalogue;
+    }
+
+    private Date getDate(){
+        java.util.Date todayJava = new java.util.Date();
+        return new Date(todayJava.getDate());
     }
 }

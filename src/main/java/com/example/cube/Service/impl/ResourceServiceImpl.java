@@ -1,11 +1,21 @@
 package com.example.cube.Service.impl;
 
 import com.example.cube.Exception.ResourceNotFoundException;
-import com.example.cube.Model.*;
+import com.example.cube.Model.Activity;
+import com.example.cube.Model.Analytics;
+import com.example.cube.Model.Catalogue;
+import com.example.cube.Model.Friend;
+import com.example.cube.Model.Resource;
+import com.example.cube.Model.User;
 import com.example.cube.Payload.ActivityDto;
 import com.example.cube.Payload.ResourceDto;
 import com.example.cube.Payload.ResourceResponse;
-import com.example.cube.Repository.*;
+import com.example.cube.Repository.ActivityRepository;
+import com.example.cube.Repository.AnalitycsRepository;
+import com.example.cube.Repository.CatalogueRepository;
+import com.example.cube.Repository.FriendRepository;
+import com.example.cube.Repository.ResourceRepository;
+import com.example.cube.Repository.UserRepository;
 import com.example.cube.Service.ActivityService;
 import com.example.cube.Service.ResourceService;
 import org.springframework.data.domain.Page;
@@ -14,7 +24,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +43,7 @@ public class ResourceServiceImpl implements ResourceService {
     private ActivityService activityService;
     private UserRepository userRepository;
     private FriendRepository friendRepository;
+    private AnalitycsRepository analyticsRepository;
     private ActivityRepository activityRepository;
 
     public ResourceServiceImpl(ResourceRepository resourceRepository,
@@ -33,12 +51,14 @@ public class ResourceServiceImpl implements ResourceService {
                                ActivityService activityService,
                                UserRepository userRepository,
                                FriendRepository friendRepository,
+                               AnalitycsRepository analyticsRepository,
                                ActivityRepository activityRepository) {
           this.resourceRepository = resourceRepository;
           this.catalogueRepository = catalogueRepository;
           this.activityService = activityService;
           this.userRepository = userRepository;
           this.friendRepository = friendRepository;
+          this.analyticsRepository = analyticsRepository;
           this.activityRepository = activityRepository;
     }
 
@@ -52,6 +72,17 @@ public class ResourceServiceImpl implements ResourceService {
         catalogue.add(resourceCatalogue);
         resource.setCatalogue(catalogue);
         Resource newResource = resourceRepository.save(resource);
+
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        if(Objects.nonNull(analytics)){
+            analytics.setCreated(analytics.getCreated() + 1);
+            analyticsRepository.save(analytics);
+        } else {
+            analytics = new Analytics();
+            analytics.setCreated(1);
+            analytics.setDate(getDate());
+            analyticsRepository.save(analytics);
+        }
 
         User user = userRepository.findUserByEmail(email);
 
@@ -186,6 +217,17 @@ public class ResourceServiceImpl implements ResourceService {
             activityRepository.save(activity);
         }
 
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        if(Objects.nonNull(analytics)){
+            analytics.setView(analytics.getView() + 1);
+            analyticsRepository.save(analytics);
+        } else {
+            analytics = new Analytics();
+            analytics.setView(1);
+            analytics.setDate(getDate());
+            analyticsRepository.save(analytics);
+        }
+
         return "resource view : " + view;
     }
     @Override
@@ -204,6 +246,17 @@ public class ResourceServiceImpl implements ResourceService {
         } else {
             activity.setFavorite(like);
             activityRepository.save(activity);
+        }
+
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        if(Objects.nonNull(analytics)){
+            analytics.setFavorite(analytics.getFavorite() + 1);
+            analyticsRepository.save(analytics);
+        } else {
+            analytics = new Analytics();
+            analytics.setFavorite(1);
+            analytics.setDate(getDate());
+            analyticsRepository.save(analytics);
         }
 
         return "resource liked : " + like;
@@ -227,6 +280,17 @@ public class ResourceServiceImpl implements ResourceService {
             activityRepository.save(activity);
         }
 
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        if(Objects.nonNull(analytics)){
+            analytics.setShare(analytics.getShare() + 1);
+            analyticsRepository.save(analytics);
+        } else {
+            analytics = new Analytics();
+            analytics.setShare(1);
+            analytics.setDate(getDate());
+            analyticsRepository.save(analytics);
+        }
+
         return "resource share : " + share;
     }
 
@@ -248,6 +312,17 @@ public class ResourceServiceImpl implements ResourceService {
             activityRepository.save(activity);
         }
 
+        Analytics analytics = analyticsRepository.getAnalyticsByDate(getDate());
+        if(Objects.nonNull(analytics)){
+            analytics.setBlocked(analytics.getBlocked() + 1);
+            analyticsRepository.save(analytics);
+        } else {
+            analytics = new Analytics();
+            analytics.setBlocked(1);
+            analytics.setDate(getDate());
+            analyticsRepository.save(analytics);
+        }
+
         return "resource blocked : " + blocked;
     }
 
@@ -267,5 +342,10 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setValue(resourceDto.getValue());
         resource.setCatalogue(resourceDto.getCatalogue());
         return resource;
+    }
+
+    private Date getDate(){
+        java.util.Date todayJava = new java.util.Date();
+        return new Date(todayJava.getDate());
     }
 }
