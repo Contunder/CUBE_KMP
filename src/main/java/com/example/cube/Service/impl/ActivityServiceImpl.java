@@ -46,10 +46,10 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void setCatalogueActivity(ActivityDto activityDto) {
-        Activity catalogueActivity = activityRepository.getActivityByCatalogue(activityDto.getCatalogue());
+        Optional<Activity> optionalCatalogueActivity = activityRepository.getActivityByCatalogue(activityDto.getCatalogue());
 
-        if (Objects.nonNull(catalogueActivity)){
-            updateActivity(catalogueActivity, activityDto);
+        if (optionalCatalogueActivity.isPresent()){
+            optionalCatalogueActivity.ifPresent(catalogueActivity -> updateActivity(catalogueActivity, activityDto));
         } else {
             Activity newActivity = mapToEntity(activityDto);
             activityRepository.save(newActivity);

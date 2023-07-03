@@ -15,6 +15,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     List<Activity> getActivitiesByResource(Optional<Resource> resource);
     List<Activity> getActivitiesByCatalogue(Optional<Catalogue> catalogue);
     Activity getActivityByResource(Optional<Resource> resource);
-    Activity getActivityByCatalogue(Optional<Catalogue> catalogue);
+    Optional<Activity> getActivityByCatalogue(Optional<Catalogue> catalogue);
 
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/analytics")
@@ -21,13 +22,13 @@ public class AnalitycsController {
     }
 
     @GetMapping(value = {"/today"})
-    public ResponseEntity<Analytics> getTodayAnalitycs() {
+    public ResponseEntity<Optional<Analytics>> getTodayAnalitycs() {
 
         return ResponseEntity.ok(analyticsService.getAnalyticsByDate(getSQLDate()));
     }
 
     @GetMapping(value = {"/{date}"})
-    public ResponseEntity<Analytics> getAnalticsAtDate(@PathVariable(value = "date") Date date) {
+    public ResponseEntity<Optional<Analytics>> getAnalticsAtDate(@PathVariable(value = "date") Date date) {
 
         return ResponseEntity.ok(analyticsService.getAnalyticsByDate(date));
     }
