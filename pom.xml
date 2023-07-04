@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.springboot.cube</groupId>
     <artifactId>springboot-cube-rest-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>springboot-cube-rest-api</name>
     <description>Spring boot cube application rest api</description>
     <properties>

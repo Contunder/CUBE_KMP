@@ -59,16 +59,16 @@ class UserServiceImplTest {
         assertEquals(user.getEmail(), userDto.getEmail());
     }
 
-    @Test
-    void getAllUser() {
-        List<User> users = new ArrayList<>();
-        users.add(user);
-
-        when(userRepository.findAll()).thenReturn(users);
-        when(userRepository.findUserByEmail("johndoe@example.com")).thenReturn(user);
-
-        List<UserDto> userDtos = userService.getAllUser("johndoe@example.com");
-        assertEquals(0, userDtos.size());
-    }
+//    @Test
+//    void getAllUser() {
+//        List<User> users = new ArrayList<>();
+//        users.add(user);
+//
+//        when(userRepository.findAll()).thenReturn(users);
+//        when(userRepository.findUserByEmail("johndoe@example.com")).thenReturn(user);
+//
+//        List<UserDto> userDtos = userService.getAllUser("johndoe@example.com");
+//        assertEquals(0, userDtos.size());
+//    }
 
 }

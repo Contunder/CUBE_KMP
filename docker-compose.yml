@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  db:
+  mysqldb:
     image: mysql:5.7
     container_name: CubeDB
     environment:
@@ -10,14 +10,14 @@ services:
       MYSQL_USER: KMPCube
       MYSQL_PASSWORD: KMPCube
     ports:
-      - "6033:3306"
+      - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: CubePMA
     links:
-      - db
+      - mysqldb
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
@@ -26,12 +26,12 @@ services:
     ports:
       - 8081:80
   cubeapi:
-    image: cubekmp:0.0.1-SNAPSHOT
+    build: ./
     ports:
       - 8080:8080
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/CUBE_KMP?autoReconnect=true&useSSL=false
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/CUBE_KMP?autoReconnect=true&useSSL=false
     depends_on:
-      - db
+      - mysqldb
 volumes:
   dbdata:

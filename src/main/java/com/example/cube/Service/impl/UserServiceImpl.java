@@ -6,6 +6,7 @@ import com.example.cube.Repository.UserRepository;
 import com.example.cube.Service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByEmail(String email) {
         User user = userRepository.findUserByEmail(email);
-
         return mapToDTO(user);
     }
 
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAllUser(String email) {
         User actualUser = userRepository.findUserByEmail(email);
         List<User> users = userRepository.findAll();
-        users = users.stream().filter(user -> user != actualUser).collect(Collectors.toList());
+        users = new ArrayList<>(users);
 
         return users.stream().map(this::mapToDTO)
                 .collect(Collectors.toList());
