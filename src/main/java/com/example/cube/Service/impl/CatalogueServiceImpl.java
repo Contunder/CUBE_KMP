@@ -166,13 +166,8 @@ public class CatalogueServiceImpl implements CatalogueService {
 
         Optional<Activity> optionalActivity = activityRepository.getActivityByCatalogue(catalogue);
         if (optionalActivity.isPresent()){
-
-            optionalActivity.ifPresent(
-                    activity -> activity.setShare(share)
-            );
-            optionalActivity.ifPresent(
-                    activity -> activityRepository.save(activity)
-            );
+            optionalActivity.ifPresent(activity -> activity.setShare(share));
+            optionalActivity.ifPresent(activity -> activityRepository.save(activity));
         } else {
             ActivityDto activityDto = new ActivityDto();
             activityDto.setResource(Optional.empty());
@@ -203,13 +198,8 @@ public class CatalogueServiceImpl implements CatalogueService {
 
         Optional<Activity> optionalActivity = activityRepository.getActivityByCatalogue(catalogue);
         if (optionalActivity.isPresent()){
-
-            optionalActivity.ifPresent(
-                    activity -> activity.setBlocked(blocked)
-            );
-            optionalActivity.ifPresent(
-                    activity -> activityRepository.save(activity)
-            );
+            optionalActivity.ifPresent(activity -> activity.setBlocked(blocked));
+            optionalActivity.ifPresent(activity -> activityRepository.save(activity));
         } else {
             ActivityDto activityDto = new ActivityDto();
             activityDto.setResource(Optional.empty());
