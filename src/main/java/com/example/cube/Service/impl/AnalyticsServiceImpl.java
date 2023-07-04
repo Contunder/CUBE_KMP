@@ -6,6 +6,7 @@ import com.example.cube.Service.AnalyticsService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.Optional;
 
 @Service
 public class AnalyticsServiceImpl implements AnalyticsService {
@@ -17,7 +18,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    public Analytics getAnalyticsByDate(Date date){
+    public Optional<Analytics> getAnalyticsByDate(Date date){
         return analyticsRepository.getAnalyticsByDate(date);
     }
 }

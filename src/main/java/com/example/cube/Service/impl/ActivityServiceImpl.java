@@ -13,7 +13,6 @@ import com.example.cube.Service.ActivityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,9 +33,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void setResourceActivity(ActivityDto activityDto) {
-        Activity resourceActivity = activityRepository.getActivityByResource(activityDto.getResource());
+        Optional<Activity> resourceActivity = activityRepository.getActivityByResource(activityDto.getResource());
 
-        if (Objects.nonNull(resourceActivity)){
+        if (resourceActivity.isPresent()){
             updateActivity(resourceActivity, activityDto);
         } else {
             Activity newActivity = mapToEntity(activityDto);
@@ -46,10 +45,10 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void setCatalogueActivity(ActivityDto activityDto) {
-        Activity catalogueActivity = activityRepository.getActivityByCatalogue(activityDto.getCatalogue());
+        Optional<Activity> optionalCatalogueActivity = activityRepository.getActivityByCatalogue(activityDto.getCatalogue());
 
-        if (Objects.nonNull(catalogueActivity)){
-            updateActivity(catalogueActivity, activityDto);
+        if (optionalCatalogueActivity.isPresent()){
+            updateActivity(optionalCatalogueActivity, activityDto);
         } else {
             Activity newActivity = mapToEntity(activityDto);
             activityRepository.save(newActivity);
@@ -157,14 +156,13 @@ public class ActivityServiceImpl implements ActivityService {
                 .toList();
     }
 
-    private void updateActivity(Activity activity, ActivityDto activityDto) {
+    private void updateActivity(Optional<Activity> optinalActivity, ActivityDto activityDto) {
 
-        activity.setView(activityDto.isView());
-        activity.setFavorite(activityDto.isFavorite());
-        activity.setBlocked(activityDto.isBlocked());
-        activity.setShare(activityDto.isShare());
-
-        activityRepository.save(activity);
+        optinalActivity.ifPresent(activity -> activity.setView(activityDto.isView()));
+        optinalActivity.ifPresent(activity -> activity.setFavorite(activityDto.isFavorite()));
+        optinalActivity.ifPresent(activity -> activity.setBlocked(activityDto.isBlocked()));
+        optinalActivity.ifPresent(activity -> activity.setShare(activityDto.isShare()));
+        optinalActivity.ifPresent(activity ->  activityRepository.save(activity));
     }
 
     private ActivityDto mapToDTO(Activity activity){

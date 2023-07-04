@@ -73,12 +73,12 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setCatalogue(catalogue);
         Resource newResource = resourceRepository.save(resource);
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
-        if(Objects.nonNull(analytics)){
-            analytics.setCreated(analytics.getCreated() + 1);
-            analyticsRepository.save(analytics);
+        Optional<Analytics> optionalAnalytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
+        if(optionalAnalytics.isPresent()){
+            optionalAnalytics.ifPresent(analytics -> analytics.setCreated(analytics.getCreated() + 1));
+            optionalAnalytics.ifPresent(analytics -> analyticsRepository.save(analytics));
         } else {
-            analytics = new Analytics();
+            Analytics analytics = new Analytics();
             analytics.setCreated(1);
             analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
@@ -145,9 +145,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public List<ResourceDto> getResourceByRelation(String email, String relation) {
+        List<Resource> resources = new ArrayList<>();
         User user = userRepository.findUserByEmail(email);
         List<Friend> friends = friendRepository.getFriendsByUser(user);
-        List<Resource> resources = new ArrayList<>();
         List<Activity> activitys = activityRepository.findAll();
 
         List<Activity> finalActivitys = activitys;
@@ -156,9 +156,6 @@ public class ResourceServiceImpl implements ResourceService {
                 .filter(friend -> friend.getUser().equals(user))
                 .map(friend -> friend.getFriend().getId())
                 .flatMap(id -> finalActivitys.stream().filter(activity -> Long.valueOf(activity.getUser().getId()).equals(id)))
-                .toList();
-
-        activitys = activitys.stream()
                 .filter(Activity::isCreated)
                 .toList();
 
@@ -204,25 +201,30 @@ public class ResourceServiceImpl implements ResourceService {
         User user = userRepository.findUserByEmail(email);
         Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
 
-        Activity activity = activityRepository.getActivityByResource(resource);
-        if (Objects.isNull(activity)){
+        Optional<Activity> optionalActivity = activityRepository.getActivityByResource(resource);
+        if (optionalActivity.isPresent()){
+
+            optionalActivity.ifPresent(
+                    activity -> activity.setView(view)
+            );
+            optionalActivity.ifPresent(
+                    activity -> activityRepository.save(activity)
+            );
+        } else {
             ActivityDto activityDto = new ActivityDto();
             activityDto.setResource(resource);
             activityDto.setCatalogue(Optional.empty());
             activityDto.setUser(user);
             activityDto.setView(view);
             activityService.setResourceActivity(activityDto);
-        } else {
-            activity.setView(view);
-            activityRepository.save(activity);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
-        if(Objects.nonNull(analytics)){
-            analytics.setView(analytics.getView() + 1);
-            analyticsRepository.save(analytics);
+        Optional<Analytics> optionalAnalytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
+        if(optionalAnalytics.isPresent()){
+            optionalAnalytics.ifPresent(analytics -> analytics.setView(analytics.getView() + 1));
+            optionalAnalytics.ifPresent(analytics -> analyticsRepository.save(analytics));
         } else {
-            analytics = new Analytics();
+            Analytics analytics = new Analytics();
             analytics.setView(1);
             analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
@@ -235,25 +237,25 @@ public class ResourceServiceImpl implements ResourceService {
         User user = userRepository.findUserByEmail(email);
         Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
 
-        Activity activity = activityRepository.getActivityByResource(resource);
-        if (Objects.isNull(activity)){
+        Optional<Activity> optionalActivity = activityRepository.getActivityByResource(resource);
+        if (optionalActivity.isPresent()){
+            optionalActivity.ifPresent(activity -> activity.setFavorite(like));
+            optionalActivity.ifPresent(activity -> activityRepository.save(activity));
+        } else {
             ActivityDto activityDto = new ActivityDto();
             activityDto.setResource(resource);
             activityDto.setCatalogue(Optional.empty());
             activityDto.setUser(user);
             activityDto.setFavorite(like);
-            activityService.setResourceActivity(activityDto);
-        } else {
-            activity.setFavorite(like);
-            activityRepository.save(activity);
+            activityService.setCatalogueActivity(activityDto);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
-        if(Objects.nonNull(analytics)){
-            analytics.setFavorite(analytics.getFavorite() + 1);
-            analyticsRepository.save(analytics);
+        Optional<Analytics> optionalAnalytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
+        if(optionalAnalytics.isPresent()){
+            optionalAnalytics.ifPresent(analytics -> analytics.setFavorite(analytics.getFavorite() + 1));
+            optionalAnalytics.ifPresent(analytics -> analyticsRepository.save(analytics));
         } else {
-            analytics = new Analytics();
+            Analytics analytics = new Analytics();
             analytics.setFavorite(1);
             analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
@@ -267,25 +269,25 @@ public class ResourceServiceImpl implements ResourceService {
         User user = userRepository.findUserByEmail(email);
         Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
 
-        Activity activity = activityRepository.getActivityByResource(resource);
-        if (Objects.isNull(activity)){
+        Optional<Activity> optionalActivity = activityRepository.getActivityByResource(resource);
+        if (optionalActivity.isPresent()){
+            optionalActivity.ifPresent(activity -> activity.setShare(share));
+            optionalActivity.ifPresent(activity -> activityRepository.save(activity));
+        } else {
             ActivityDto activityDto = new ActivityDto();
             activityDto.setResource(resource);
             activityDto.setCatalogue(Optional.empty());
             activityDto.setUser(user);
             activityDto.setShare(share);
-            activityService.setResourceActivity(activityDto);
-        } else {
-            activity.setShare(share);
-            activityRepository.save(activity);
+            activityService.setCatalogueActivity(activityDto);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
-        if(Objects.nonNull(analytics)){
-            analytics.setShare(analytics.getShare() + 1);
-            analyticsRepository.save(analytics);
+        Optional<Analytics> optionalAnalytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
+        if(optionalAnalytics.isPresent()){
+            optionalAnalytics.ifPresent(analytics -> analytics.setShare(analytics.getShare() + 1));
+            optionalAnalytics.ifPresent(analytics -> analyticsRepository.save(analytics));
         } else {
-            analytics = new Analytics();
+            Analytics analytics = new Analytics();
             analytics.setShare(1);
             analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
@@ -299,25 +301,25 @@ public class ResourceServiceImpl implements ResourceService {
         User user = userRepository.findUserByEmail(email);
         Optional<Resource> resource = Optional.ofNullable(resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource", "id", id)));
 
-        Activity activity = activityRepository.getActivityByResource(resource);
-        if (Objects.isNull(activity)){
+        Optional<Activity> optionalActivity = activityRepository.getActivityByResource(resource);
+        if (optionalActivity.isPresent()){
+            optionalActivity.ifPresent(activity -> activity.setBlocked(blocked));
+            optionalActivity.ifPresent(activity -> activityRepository.save(activity));
+        } else {
             ActivityDto activityDto = new ActivityDto();
             activityDto.setResource(resource);
             activityDto.setCatalogue(Optional.empty());
             activityDto.setUser(user);
             activityDto.setBlocked(blocked);
-            activityService.setResourceActivity(activityDto);
-        } else {
-            activity.setBlocked(blocked);
-            activityRepository.save(activity);
+            activityService.setCatalogueActivity(activityDto);
         }
 
-        Analytics analytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
-        if(Objects.nonNull(analytics)){
-            analytics.setBlocked(analytics.getBlocked() + 1);
-            analyticsRepository.save(analytics);
+        Optional<Analytics> optionalAnalytics = analyticsRepository.getAnalyticsByDate(getSQLDate());
+        if(optionalAnalytics.isPresent()){
+            optionalAnalytics.ifPresent(analytics -> analytics.setBlocked(analytics.getBlocked() + 1));
+            optionalAnalytics.ifPresent(analytics -> analyticsRepository.save(analytics));
         } else {
-            analytics = new Analytics();
+            Analytics analytics = new Analytics();
             analytics.setBlocked(1);
             analytics.setDate(getSQLDate());
             analyticsRepository.save(analytics);
