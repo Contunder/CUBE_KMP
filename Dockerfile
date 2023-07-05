@@ -5,3 +5,4 @@ COPY target/*.jar app.jar
 RUN chown -R javauser:javauser .
 USER javauser
 ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE 8080
