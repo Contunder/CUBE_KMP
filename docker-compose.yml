@@ -26,7 +26,7 @@ services:
     ports:
       - 8081:80
   cubeapi:
-    build: ./
+    image: valden01/cubekmp
     ports:
       - 8080:8080
     environment:
