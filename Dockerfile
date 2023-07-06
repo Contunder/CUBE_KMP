@@ -1,4 +1,8 @@
-FROM --platform=linux/x86_64 bellsoft/liberica-openjdk-alpine-musl:19
-ADD target/*.jar app.jar
+FROM --platform=linux/x86_64 eclipse-temurin:17.0.5_8-jre-alpine@sha256:02c04793fa49ad5cd193c961403223755f9209a67894622e05438598b32f210e
+WORKDIR /opt/app
+RUN addgroup --system javauser && adduser -S -s /usr/sbin/nologin -G javauser javauser
+COPY target/*.jar app.jar
+RUN chown -R javauser:javauser .
+USER javauser
 ENTRYPOINT ["java", "-jar", "app.jar"]
 EXPOSE 8080
