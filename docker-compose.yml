@@ -2,6 +2,7 @@ version: '3'
 
 services:
   mysqldb:
+    platform: linux/amd64
     image: mysql:5.7
     container_name: CubeDB
     environment:
@@ -14,18 +15,20 @@ services:
     volumes:
       - dbdata:/var/lib/mysql
   phpmyadmin:
+    platform: linux/amd64
     image: phpmyadmin/phpmyadmin
     container_name: CubePMA
     links:
       - mysqldb
     environment:
-      PMA_HOST: db
+      PMA_HOST: mysqldb
       PMA_PORT: 3306
       PMA_ARBITRARY: 1
     restart: always
     ports:
       - 8081:80
   cubeapi:
+    platform: linux/amd64
     image: valden01/cubekmp
     ports:
       - 8080:8080
