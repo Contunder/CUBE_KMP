@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,7 @@ class ActivityServiceImplTest {
     private ActivityServiceImpl activityService;
 
     private User user;
+    private User friend;
     private List<Activity> activities;
 
     @BeforeEach
@@ -47,6 +49,12 @@ class ActivityServiceImplTest {
         user.setName("John");
         user.setLastName("Doe");
         user.setEmail("johndoe@example.com");
+
+        friend = new User();
+        friend.setId(1L);
+        friend.setName("John");
+        friend.setLastName("Doe");
+        friend.setEmail("johndoe@example.com");
 
         activities = new ArrayList<>();
         Activity activity1 = new Activity();
@@ -217,5 +225,146 @@ class ActivityServiceImplTest {
         assertEquals(2, result.size());
         assertEquals(1, result.get(0).getId());
         assertEquals(2, result.get(1).getId());
+    }
+
+    @Test
+    void testGetViewedActivityByUser() {
+        // Arrange
+        String email = "test@example.com";
+        when(userRepository.findUserByEmail(any())).thenReturn(user);
+        when(activityRepository.getActivitiesByUser(user)).thenReturn(activities);
+
+        // Act
+        List<ActivityDto> result = activityService.getViewedActivityByUser(email);
+
+        // Assert
+        Activity activity1 = new Activity();
+        activity1.setId(1);
+        activity1.setUser(user);
+        activity1.setResource(Resource.builder().id(1L).build());
+        activity1.setCatalogue(new Catalogue());
+        activity1.setView(true);
+        assertEquals(1, result.size());
+        assertEquals(activity1.getId(), result.get(0).getId());
+    }
+
+    @Test
+    void testGetLickedActivityByUser() {
+        // Arrange
+        String email = "test@example.com";
+        Activity activity3 = new Activity();
+        activity3.setId(3);
+        activity3.setUser(user);
+        activity3.setResource(Resource.builder().id(1L).build());
+        activity3.setCatalogue(new Catalogue());
+        activity3.setFavorite(true);
+
+        activities.add(activity3);
+
+        when(userRepository.findUserByEmail(email)).thenReturn(user);
+        when(activityRepository.getActivitiesByUser(user)).thenReturn(activities);
+
+        // Act
+        List<ActivityDto> result = activityService.getLickedActivityByUser(email);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals(activity3.getId(), result.get(0).getId());
+    }
+
+    @Test
+    void testGetShareActivityByUser() {
+        // Arrange
+        String email = "test@example.com";
+        Activity activity3 = new Activity();
+        activity3.setId(3);
+        activity3.setUser(user);
+        activity3.setResource(Resource.builder().id(1L).build());
+        activity3.setCatalogue(new Catalogue());
+        activity3.setShare(true);
+
+        activities.add(activity3);
+
+        when(userRepository.findUserByEmail(email)).thenReturn(user);
+        when(activityRepository.getActivitiesByUser(user)).thenReturn(activities);
+
+        // Act
+        List<ActivityDto> result = activityService.getShareActivityByUser(email);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals(activity3.getId(), result.get(0).getId());
+    }
+
+    @Test
+    void testGetBlockedActivityByUser() {
+        // Arrange
+        String email = "test@example.com";
+        Activity activity3 = new Activity();
+        activity3.setId(3);
+        activity3.setUser(user);
+        activity3.setResource(Resource.builder().id(1L).build());
+        activity3.setCatalogue(new Catalogue());
+        activity3.setBlocked(true);
+
+        activities.add(activity3);
+
+        when(userRepository.findUserByEmail(email)).thenReturn(user);
+        when(activityRepository.getActivitiesByUser(user)).thenReturn(activities);
+
+        // Act
+        List<ActivityDto> result = activityService.getBlockedActivityByUser(email);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals(activity3.getId(), result.get(0).getId());
+    }
+
+    @Test
+    void testGetLikedActivityByUserId() {
+        // Arrange
+        long userId = 1L;
+        Activity activity3 = new Activity();
+        activity3.setId(3);
+        activity3.setUser(friend);
+        activity3.setResource(Resource.builder().id(1L).build());
+        activity3.setCatalogue(new Catalogue());
+        activity3.setFavorite(true);
+
+        activities.add(activity3);
+
+        when(userRepository.findUserById(userId)).thenReturn(user);
+        when(activityRepository.getActivitiesByUser(any())).thenReturn(activities);
+
+        // Act
+        List<ActivityDto> result = activityService.getLikedActivityByUserId(userId);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals(activity3.getId(), result.get(0).getId());
+    }
+
+    @Test
+    void testGetSharedActivityByUserId() {
+        // Arrange
+        long userId = 1L;
+        Activity activity3 = new Activity();
+        activity3.setId(3);
+        activity3.setUser(friend);
+        activity3.setResource(Resource.builder().id(1L).build());
+        activity3.setCatalogue(new Catalogue());
+        activity3.setShare(true);
+
+        activities.add(activity3);
+
+        when(userRepository.findUserById(userId)).thenReturn(user);
+        when(activityRepository.getActivitiesByUser(any())).thenReturn(activities);
+
+        // Act
+        List<ActivityDto> result = activityService.getSharedActivityByUserId(userId);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals(activity3.getId(), result.get(0).getId());
     }
 }
