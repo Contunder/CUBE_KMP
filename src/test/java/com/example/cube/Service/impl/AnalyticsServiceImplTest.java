@@ -27,7 +27,7 @@ class AnalyticsServiceImplTest {
     @Test
     void testGetAnalyticsByDate() {
         // Arrange
-        Date date = new Date(2023,07,06);
+        Date date = new Date(2023,7,6);
         Analytics expectedAnalytics = new Analytics();
 
         when(analyticsRepository.getAnalyticsByDate(date)).thenReturn(Optional.of(expectedAnalytics));
