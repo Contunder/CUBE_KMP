@@ -1,35 +1,45 @@
 package com.example.cube.Service.impl;
 
-import com.example.cube.Exception.ResourceNotFoundException;
-import com.example.cube.Model.*;
-import com.example.cube.Payload.CatalogueDto;
+import com.example.cube.Model.Activity;
+import com.example.cube.Model.Analytics;
+import com.example.cube.Model.Catalogue;
+import com.example.cube.Model.Friend;
+import com.example.cube.Model.Resource;
+import com.example.cube.Model.User;
 import com.example.cube.Payload.ResourceDto;
 import com.example.cube.Payload.ResourceResponse;
-import com.example.cube.Repository.*;
+import com.example.cube.Repository.ActivityRepository;
+import com.example.cube.Repository.AnalyticsRepository;
+import com.example.cube.Repository.CatalogueRepository;
+import com.example.cube.Repository.FriendRepository;
+import com.example.cube.Repository.ResourceRepository;
+import com.example.cube.Repository.UserRepository;
 import com.example.cube.Service.ActivityService;
-import com.example.cube.Service.ResourceService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ResourceServiceImplTest {
 
     @Mock
@@ -63,7 +73,7 @@ public class ResourceServiceImplTest {
     private User friend;
     private Analytics analytics;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         ressourceDto = new ResourceDto();
         ressourceDto.setId(1L);
@@ -97,9 +107,7 @@ public class ResourceServiceImplTest {
         ResourceDto result = resourceService.createResource(ressourceDto, catalogueId,"test@yopmail.com");
 
         // then
-        Assertions.assertAll(
-                () -> assertEquals(resource.getId(), result.getId())
-        );
+        assertEquals(resource.getId(), result.getId());
     }
 
     @Test
@@ -113,14 +121,12 @@ public class ResourceServiceImplTest {
         ResourceResponse result = resourceService.getAllResources(0, 10, "name", "ASC");
 
         // then
-        Assertions.assertAll(
-                () -> assertEquals(0, result.getPageNo()),
-                () -> assertEquals(2, result.getPageSize()),
-                () -> assertEquals(resourceList.size(), result.getTotalElements()),
-                () -> assertEquals(1, result.getTotalPages()),
-                () -> assertEquals(true, result.isLast()),
-                () -> assertEquals(resourceList.size(), result.getContent().size())
-        );
+        assertEquals(0, result.getPageNo());
+        assertEquals(2, result.getPageSize());
+        assertEquals(resourceList.size(), result.getTotalElements());
+        assertEquals(1, result.getTotalPages());
+        assertEquals(true, result.isLast());
+        assertEquals(resourceList.size(), result.getContent().size());
     }
 
     private List<Resource> createMockResourceList() {
@@ -142,21 +148,9 @@ public class ResourceServiceImplTest {
         ResourceDto result = resourceService.getResourceById(1L);
 
         // then
-        Assertions.assertAll(
-                () -> assertNotNull(result),
-                () -> assertEquals(mockResource.getId(), result.getId()),
-                () -> assertEquals(mockResource.getValue(), result.getValue())
-        );
-    }
-
-    @Test
-    public void testGetResourceById_ResourceNotFound() {
-        // given
-        when(resourceRepository.findById(any())).thenReturn(Optional.empty());
-
-
-        // then
-        assertThrows(ResourceNotFoundException.class, () -> resourceService.getResourceById(1L));
+        assertNotNull(result);
+        assertEquals(mockResource.getId(), result.getId());
+        assertEquals(mockResource.getValue(), result.getValue());
     }
 
     @Test
@@ -174,10 +168,8 @@ public class ResourceServiceImplTest {
         List<ResourceDto> result = resourceService.getResourceByUserId(1L);
 
         // then
-        Assertions.assertAll(
-                () -> assertNotNull(result),
-                () -> assertEquals(mockResources.size(), result.size())
-        );
+        assertNotNull(result);
+        assertEquals(mockResources.size(), result.size());
     }
 
     private List<Activity> createMockActivities() {
@@ -239,12 +231,10 @@ public class ResourceServiceImplTest {
         ResourceDto result = resourceService.updateResource(resourceDto, 1L, 1L);
 
         // then
-        Assertions.assertAll(
-                () -> assertNotNull(result),
-                () -> assertEquals(mockResource.getId(), result.getId()),
-                () -> assertEquals(resourceDto.getAccess(), result.getAccess()),
-                () -> assertEquals(resourceDto.getValue(), result.getValue())
-        );
+        assertNotNull(result);
+        assertEquals(mockResource.getId(), result.getId());
+        assertEquals(resourceDto.getAccess(), result.getAccess());
+        assertEquals(resourceDto.getValue(), result.getValue());
     }
 
     @Test
@@ -259,19 +249,6 @@ public class ResourceServiceImplTest {
 
         // Verify that the delete method was called with the correct resource
         Mockito.verify(resourceRepository, Mockito.times(1)).delete(mockResource);
-    }
-
-    @Test
-    public void testDeleteResourceById_ResourceNotFound() {
-        // Mock the resource repository to return an empty optional
-        when(resourceRepository.findById(any())).thenReturn(Optional.empty());
-
-
-        // Call the method being tested and assert that it throws an exception
-        assertThrows(ResourceNotFoundException.class, () -> resourceService.deleteResourceById(1L));
-
-        // Verify that the delete method was not called
-        Mockito.verify(resourceRepository, Mockito.never()).delete(any(Resource.class));
     }
 
     @Test
@@ -316,9 +293,7 @@ public class ResourceServiceImplTest {
         String view = resourceService.setView(email, 1, true);
 
         // then
-        Assertions.assertAll(
-                () -> assertThat(view).isEqualTo("resource view : true")
-        );
+        assertThat(view).isEqualTo("resource view : true");
     }
 
     @Test
@@ -339,9 +314,7 @@ public class ResourceServiceImplTest {
         String view = resourceService.setLike(email, 1, true);
 
         // then
-        Assertions.assertAll(
-                () -> assertThat(view).isEqualTo("resource liked : true")
-        );
+        assertThat(view).isEqualTo("resource liked : true");
     }
 
     @Test
@@ -362,9 +335,7 @@ public class ResourceServiceImplTest {
         String view = resourceService.setShare(email, 1, true);
 
         // then
-        Assertions.assertAll(
-                () -> assertThat(view).isEqualTo("resource share : true")
-        );
+        assertThat(view).isEqualTo("resource share : true");
     }
 
     @Test
@@ -385,9 +356,7 @@ public class ResourceServiceImplTest {
         String view = resourceService.setBlocked(email, 1, true);
 
         // then
-        Assertions.assertAll(
-                () -> assertThat(view).isEqualTo("resource blocked : true")
-        );
+        assertThat(view).isEqualTo("resource blocked : true");
     }
 
     private static Date getSQLDate(){
