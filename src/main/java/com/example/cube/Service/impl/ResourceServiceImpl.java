@@ -29,10 +29,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.nonNull;
 
 @Service
 public class ResourceServiceImpl implements ResourceService {
@@ -68,8 +69,8 @@ public class ResourceServiceImpl implements ResourceService {
         Resource resource = mapToEntity(resourceDto);
 
         Set<Catalogue> catalogue = new HashSet<>();
-        Catalogue resourceCatalogue = catalogueRepository.findById(catalogueId).get();
-        catalogue.add(resourceCatalogue);
+        Optional<Catalogue> resourceCatalogue = catalogueRepository.findById(catalogueId);
+        resourceCatalogue.ifPresent(catalogue::add);
         resource.setCatalogue(catalogue);
         Resource newResource = resourceRepository.save(resource);
 
@@ -99,8 +100,7 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public ResourceResponse getAllResources(int pageNo, int pageSize, String sortBy, String sortDir) {
 
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
@@ -108,7 +108,7 @@ public class ResourceServiceImpl implements ResourceService {
 
         List<Resource> listOfResources = resource.getContent();
 
-        List<ResourceDto> content= listOfResources.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+        List<ResourceDto> content= listOfResources.stream().map(this::mapToDTO).collect(Collectors.toList());
 
         ResourceResponse resourceResponse = new ResourceResponse();
         resourceResponse.setContent(content);
@@ -133,11 +133,10 @@ public class ResourceServiceImpl implements ResourceService {
         List<Resource> resources = new ArrayList<>();
         List<Activity> activitys = activityRepository.getActivitiesByUser(user);
 
-        List<Resource> finalResources = resources;
         activitys.stream()
                 .filter(Activity::isCreated)
-                .filter(activity -> Objects.nonNull(activity.getResource()))
-                .forEach(activity -> finalResources.add(resourceRepository.getResourceByIdOrderById(activity.getResource().getId())));
+                .filter(activity -> nonNull(activity.getResource()))
+                .forEach(activity -> resources.add(resourceRepository.getResourceByIdOrderById(activity.getResource().getId())));
 
 
         return resources.stream().map(this::mapToDTO).toList();

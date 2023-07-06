@@ -7,8 +7,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: KMPCube
       MYSQL_DATABASE: CUBE_KMP
-      MYSQL_USER: KMPCube123
-      MYSQL_PASSWORD: KMPCube123
+      MYSQL_USER: KMPCube
+      MYSQL_PASSWORD: KMPCube
     ports:
       - "3306:3306"
     volumes:
