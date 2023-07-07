@@ -72,7 +72,7 @@ class CommentControllerTest {
         List<CommentDto> response = commentController.getCommentsByPostId(resourceId);
 
         // Assert
-        Assertions.assertEquals(commentDtos, response);
+        Assertions.assertEquals("test", response);
         Mockito.verify(commentService).getCommentsByResourceId(resourceId);
     }
 }
