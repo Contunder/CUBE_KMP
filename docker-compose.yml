@@ -33,7 +33,11 @@ services:
     ports:
       - 8080:8080
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/CUBE_KMP?autoReconnect=true&useSSL=false
+      DB_SERVER: mysqldb
+      DB_PORT: 3306
+      DB_NAME: CUBE_KMP
+      DB_USERNAME: KMPCube
+      DB_PASSWORD: KMPCube
     depends_on:
       - mysqldb
 volumes:
