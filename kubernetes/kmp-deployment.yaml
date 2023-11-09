@@ -17,7 +17,6 @@ spec:
       containers:
         - name: kmpcube
           image: valden01/cubekmp:latest
-          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 8080
