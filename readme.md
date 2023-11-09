@@ -11,6 +11,14 @@
 >ROLE_USER  
 >ROLE_ADMIN
 
+In Kubernetes
+
+>kubectl exec -it deploy/mysql -- /bin/bash  
+>mysql --user=$MYSQL_USER --password=$MYSQL_PASSWORD  
+
+>USE KMPCube;  
+>INSERT INTO `roles` (`id`, `name`) VALUES (1, 'ROLE_USER'), (2, 'ROLE_ADMIN');
+
 - If you have any problems you can't change acces in SecurityConfig 
 
 > .anyRequest().authenticated() -> .anyRequest().permitAll()
