@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: KMPCube
+  name: kmpcube
   labels:
-    app: KMPCube
+    app: kmpcube
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: KMPCube
+      app: kmpcube
   template:
     metadata:
       labels:
-        app: KMPCube
+        app: kmpcube
     spec:
       containers:
-        - name: KMPCube
-          image: valden01/cubekmp:tagname
+        - name: kmpcube
+          image: valden01/cubekmp:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -48,13 +48,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: KMPCube
+  name: kmpcube
   labels:
-    app: KMPCube
+    app: kmpcube
 spec:
   type: LoadBalancer
   selector:
-    app: KMPCube
+    app: kmpcube
   ports:
     - protocol: TCP
       name: http

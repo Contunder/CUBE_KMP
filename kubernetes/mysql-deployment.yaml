@@ -56,7 +56,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: mysql-config-map
-                  key: KMPCube
+                  key: mysql-database-name
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -66,12 +66,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: mysql-config-map
-                  key: KMPCube
+                  key: mysql-user-username
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-pass
-                  key: KMPCube
+                  key: mysql-user-password
           livenessProbe:
             tcpSocket:
               port: 3306
