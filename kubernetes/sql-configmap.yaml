@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: mysql-config-map
 data:
-  mysql-server: KMPCube    # The name of mysql service
-  mysql-database-name: KMPCube     # The name of the database used by the demo app
-  mysql-user-username: KMPCube     # A new created user for the demo app
+  mysql-server: mysql-app
+  mysql-database-name: KMPCube
+  mysql-user-username: KMPCube
