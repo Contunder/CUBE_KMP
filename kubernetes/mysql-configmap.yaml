@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: mysql-config-map
 data:
-  mysql-server: "KMPCube"
+  mysql-server: "mysql"
   mysql-database-name: "KMPCube"
   mysql-user-username: "KMPCube"
