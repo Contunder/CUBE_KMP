@@ -17,9 +17,6 @@ import static org.mockito.Mockito.when;
 class SecurityConfigTest {
 
     @Mock
-    private UserDetailsService userDetailsService;
-
-    @Mock
     private AuthenticationConfiguration authenticationConfiguration;
 
     private SecurityConfig securityConfig;
@@ -27,7 +24,7 @@ class SecurityConfigTest {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        securityConfig = new SecurityConfig(userDetailsService);
+        securityConfig = new SecurityConfig();
     }
 
     @Test

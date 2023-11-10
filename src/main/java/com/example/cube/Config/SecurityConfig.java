@@ -20,10 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private UserDetailsService userDetailsService;
-
-    public SecurityConfig(UserDetailsService userDetailsService){
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(){
     }
 
     @Bean
